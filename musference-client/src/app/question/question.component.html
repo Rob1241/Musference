@@ -1,0 +1,39 @@
+
+<div class="head-question">
+    <h1>All questions</h1>
+    <div class="askquest">
+        New question
+    </div>
+</div>
+<div class="question-oper">
+    22,452 questions
+</div>
+<div class="question" *ngFor="let item of questionList$|async">
+    <div class="question-left">
+        <div class="left-left">
+            <div class="answers">answers:</div>
+            <div class="pluses">pluses:</div>
+            <div class="minuses">minuses:</div>
+            <div class="views">views:</div>
+        </div>
+        <div class="left-right">
+            <div class="num">{{item.answers}}</div>
+            <div class="num">{{item.pluses}}</div>
+            <div class="num"> {{item.minuses}}</div>
+            <div class="num">{{item.views}}</div>
+        </div>
+    </div>
+    <div class="question-right">
+        <h1 class="heading">{{item.heading}}</h1>
+        <div class="question-content">
+            {{item.content}}        
+        </div>
+        <div class="tags" *ngFor="let item1 of item.tags|async">
+            <div class="tag">{{item1.description}}</div>
+        </div>
+        <div class="user-date">
+            <div class="user">{{item.username}}</div>
+            <div class="date">{{item.dateAdded}}</div>
+        </div>
+    </div>
+</div>

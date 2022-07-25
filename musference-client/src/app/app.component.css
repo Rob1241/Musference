@@ -1,0 +1,13 @@
+body {
+}
+.container {
+    display: flex;
+    flex-direction: row;
+}
+.left-sidebar{
+    position:fixed;
+}
+.content{
+    position: relative;
+    left:220px;
+}

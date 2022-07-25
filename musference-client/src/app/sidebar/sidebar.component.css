@@ -1,0 +1,22 @@
+.sidebar-list {
+  padding: 0;
+  flex-direction: column;
+  list-style: none;
+}
+.sidebar-list .hidden-sidebar {
+  margin-left: 1.5rem;
+}
+.sidebar-link {
+  display: flex;
+  padding: .5rem 0;
+  color: var(--light-gray);
+  text-decoration: none;
+  align-items: center;
+  padding-left: 25px;
+}
+.sidebar{
+  background-color: rgb(236, 236, 236);
+  width: 200px;
+  margin-top: 4px;
+}
+

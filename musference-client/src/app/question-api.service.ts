@@ -10,7 +10,7 @@ export class QuestionApiService {
   readonly questionAPIUrl = "https://localhost:7289/api"
   constructor(private http:HttpClient) { }
 
-  getQuestionList():Observable<any[]> {
+  getQuestionList():Observable<any[]> {  
     return this.http.get<any>(this.questionAPIUrl+'/Question');
   }
   addQuestion(data:any) {

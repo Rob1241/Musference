@@ -38,7 +38,7 @@ namespace Musference.Controllers
             {
                 var user = _context.UsersDbSet.FirstOrDefault(u => u.Id == item.UserId);
                 var getquestiondto = _mapper.Map<GetQuestionDto>(item);
-                getquestiondto.Username = user.Name;
+               // getquestiondto.Username = user.Name;
                 questionListDto.Add(getquestiondto);
             }
             return Ok(questionListDto);

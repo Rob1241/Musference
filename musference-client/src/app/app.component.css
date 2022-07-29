@@ -1,4 +1,7 @@
-body {
+.navbar1 {
+    position: sticky;
+    top:0;
+    z-index: 9999;
 }
 .container {
     display: flex;
@@ -8,6 +11,7 @@ body {
     position:fixed;
 }
 .content{
+    width: 70%;
     position: relative;
     left:220px;
 }

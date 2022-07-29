@@ -1,0 +1,38 @@
+.users{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 5px;
+    grid-auto-rows: 100px;
+    grid-auto-columns: 400px;
+    padding: 10px;
+    
+}
+.user{
+    border: 1px solid black;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.users-img {
+    height: 100px;
+    width: 100px;
+    object-fit: contain;
+}   
+
+.imgg {
+    height: 100%; 
+    width: 100%; 
+    object-fit: cover;
+    padding: 10px;
+    border-radius: 50%;
+}
+.users-rep {
+    font-size: 14px;
+}
+.users-country {
+    font-size: 14px;
+}
+.users-nick {
+    font-size: 20px;
+}

@@ -1,4 +1,5 @@
 .users{
+    width:880px;
     display: grid;
     grid-template-columns: auto auto auto auto;
     gap: 5px;

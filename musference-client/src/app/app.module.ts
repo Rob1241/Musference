@@ -8,6 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { QuestionApiService } from './question-api.service';
 import { OneQuestionComponent } from './one-question/one-question.component';
+import { TracksComponent } from './tracks/tracks.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { OneQuestionComponent } from './one-question/one-question.component';
     NavbarComponent,
     SidebarComponent,
     OneQuestionComponent,
-    routingComponents
+    routingComponents,
+    TracksComponent
   ],
   imports: [
     BrowserModule,

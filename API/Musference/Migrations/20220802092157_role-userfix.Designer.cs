@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Musference.Data;
 
@@ -11,9 +12,10 @@ using Musference.Data;
 namespace Musference.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220802092157_role-userfix")]
+    partial class roleuserfix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,8 +45,9 @@ namespace Musference.Migrations
                     b.Property<int>("Pluses")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -54,10 +57,6 @@ namespace Musference.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AnswersDbSet");
                 });
@@ -70,7 +69,7 @@ namespace Musference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AnswersAmount")
+                    b.Property<int>("Answers")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -149,12 +148,15 @@ namespace Musference.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -176,12 +178,7 @@ namespace Musference.Migrations
                     b.Property<int>("Reputation")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("UsersDbSet");
                 });
@@ -201,41 +198,11 @@ namespace Musference.Migrations
                     b.ToTable("UserUser");
                 });
 
-            modelBuilder.Entity("Musference.Models.Answer", b =>
-                {
-                    b.HasOne("Musference.Models.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Musference.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Musference.Models.Tag", b =>
                 {
                     b.HasOne("Musference.Models.Question", null)
                         .WithMany("Tags")
                         .HasForeignKey("QuestionId");
-                });
-
-            modelBuilder.Entity("Musference.Models.User", b =>
-                {
-                    b.HasOne("Musference.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("UserUser", b =>
@@ -255,8 +222,6 @@ namespace Musference.Migrations
 
             modelBuilder.Entity("Musference.Models.Question", b =>
                 {
-                    b.Navigation("Answers");
-
                     b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618

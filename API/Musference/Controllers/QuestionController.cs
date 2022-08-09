@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Musference.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Musference.Models;
+using Musference.Services;
 using Musference.Models.DTOs;
-using Musference.Models.Mappers;
-using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Musference.Controllers
 {
@@ -12,36 +10,67 @@ namespace Musference.Controllers
     [ApiController]
     public class QuestionController : ControllerBase
     {
-        public readonly DataBaseContext _context;
-        public readonly IMapper _mapper;
-        public QuestionController(DataBaseContext context, IMapper mapper)
+        private readonly IQuestionService _service;
+
+        public QuestionController(IQuestionService service)
         {
-            _context = context;
-            _mapper = mapper;
+            _service = service;
         }
         [HttpPost]
+        [Authorize]
         public ActionResult AddQuestion([FromBody] AddQuestionDTO questiondto)
         {
-            var new_question = _mapper.Map<Question>(questiondto);
-            new_question.DateAdded= DateTime.Now;
-            _context.QuestionsDbSet.Add(new_question);
-            _context.SaveChanges();
-            return Created($"/api/Question/{new_question.Id}", null);
+            var id = _service.AddQuestion(questiondto);
+            return Created($"/api/Question/{id}", null);
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Question>> GetAllQuestions()
+        public ActionResult<IEnumerable<GetQuestionDto>> GetAllQuestions()
         {
-            List<Question> questionList = new List<Question>();
-            List<GetQuestionDto> questionListDto = new List<GetQuestionDto>();
-            questionList = _context.QuestionsDbSet.ToList();
-            foreach (var item in questionList)
-            {
-                var user = _context.UsersDbSet.FirstOrDefault(u => u.Id == item.UserId);
-                var getquestiondto = _mapper.Map<GetQuestionDto>(item);
-               // getquestiondto.Username = user.Name;
-                questionListDto.Add(getquestiondto);
-            }
-            return Ok(questionListDto);
+            var list = _service.GetAllQuestions();
+            return Ok(list);
         }
+        [HttpGet("{id}")]
+        public ActionResult GetQuestion([FromRoute] int id)
+        {
+            var question = _service.GetQuestion(id);
+            return Ok(question);
+        }
+
+        [HttpPut("plus/{id}")]
+        [Authorize]
+        public ActionResult PlusQuestion([FromRoute] int id)
+        {
+            _service.PlusQuestion(id);
+            return Ok();
+        }
+        [HttpPut("minus/{id}")]
+        [Authorize]
+        public ActionResult MinusQuestion([FromRoute] int id)
+        {
+            _service.MinusQuestion(id);
+            return Ok();
+        }
+        [HttpPost("{id}/Answer")]
+        [Authorize]
+        public ActionResult AddAnswer([FromBody] AddAnswerDto dto, [FromRoute] int id)
+        {
+            int answer_id = _service.AddAnswer(dto, id);
+            return Created($"api/Answer/{answer_id}",null);
+        }
+        [HttpPut("Answer/{id}/Plus")]
+        [Authorize]
+        public ActionResult PlusAnswer([FromRoute] int id)
+        {
+            _service.PlusAnswer(id);
+            return Ok();
+        }
+        [HttpPut("Answer/{id}/Minus")]
+        [Authorize]
+        public ActionResult MinusAnswer([FromRoute] int id)
+        {
+            _service.MinusAnswer(id);
+            return Ok();
+        }
+
     }
 }

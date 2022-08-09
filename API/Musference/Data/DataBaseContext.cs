@@ -16,7 +16,20 @@ namespace Musference.Data
         public DbSet<Tag> TagsDbSet { get; set; }
 
         public DbSet<User> UsersDbSet { get; set; }
-        
+
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<Track> TracksDbSet { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .Property(u => u.Country).IsRequired(false);
+            modelBuilder.Entity<User>()
+                .Property(u => u.Description).IsRequired(false);
+            modelBuilder.Entity<User>()
+                .Property(u => u.City).IsRequired(false);
+
+        }
 
     }
     

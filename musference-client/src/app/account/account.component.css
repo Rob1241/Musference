@@ -1,19 +1,14 @@
+.account-container {
+  width: 870px;
+  padding:10px;
+}
 .account{
     display: grid;
     gap:0px;
-    padding:10px;
     grid-auto-rows: 240px;
-    grid-auto-columns:30px;
+    grid-auto-columns:120px;
 }
-.tracks-account{
-    border: 1px solid black;
-    border-radius: 25px;
-    grid-row: 3;
-    grid-column: 1/ span 28;
-    display: flex;
-    flex-direction: row;
-    margin: 10px;
-}
+
 .nick {
     font-size: 30px;
 }
@@ -22,15 +17,20 @@
 .image-account {
     border: 1px solid black;
     border-radius: 25px;
-    grid-column: 1 / span 8;
+    grid-column: 1 / span 2;
     grid-row: 1;
     margin: 10px;
   }
+.image-acc-im {
+  width: 100% ;
+  height: 100%;
+  border-radius: 20px;
+}
   
   .account-description{
     border: 1px solid black;
     border-radius: 25px;
-    grid-column: 9 /span 20;
+    grid-column: 3 /span 5;
     grid-row: 1;
     margin: 10px;
     padding: 20px;
@@ -38,15 +38,85 @@
   .account-stats {
     border: 1px solid black;
     border-radius: 25px;
-    grid-column: 1 /span 8;
+    grid-column: 1 /span 2;
     grid-row: 2;
     margin: 10px;
   }
   .account-contact {
     border: 1px solid black;
     border-radius: 25px;
-    grid-column: 9/span 20;
+    grid-column: 3/span 5;
     grid-row: 2;
     margin: 10px;
     padding: 20px;
   }
+  .account-track {
+    border: 1px solid black;
+    border-radius: 5px;
+    /* margin: 5px;  */
+    grid-auto-rows: 1px;
+    width:395px;
+    height: 130px;
+  }
+  .tracks-account{
+    display: flex;
+    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto auto;
+    /* padding: 10px; */
+    margin: 10px;
+    gap:5px;
+    width: 100%;
+    height: 320px;
+}
+.a-track{
+  border-radius: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+}
+.a-tracks-img {
+  height: 100px;
+  width: 100px;
+  object-fit: contain;
+}   
+
+.a-tracks-imgg {
+  height: 100%; 
+  width: 100%; 
+  object-fit: cover;
+  padding: 0px;
+  border-radius: 0px;
+}
+.a-tracks-artist {
+  font-size: 20px;
+}
+.a-tracks-title {
+  font-size: 18px;
+}
+.a-tracks-date {
+  font-size: 14px;
+}
+.a-track-len {
+  display: flex;
+  flex-direction: row;
+  height: 25px;
+}
+.a-track-tags {
+  display: flex;
+  flex-direction: row;
+}
+.track-tag{
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: rgb(221, 221, 221);
+  margin-right:10px;
+}
+.a-tracks-date{
+  text-align: end;
+}
+.a-tracks-info{
+  width: 280px;
+}

@@ -13,7 +13,9 @@
 
         public List<Tag> Tags { get; set; }
 
-        public int Answers { get; set; }
+        public List<Answer> Answers { get; set; }
+
+        public int AnswersAmount { get; set; }
 
         public int Views { get; set; }
 

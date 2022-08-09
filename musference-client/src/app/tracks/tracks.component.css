@@ -1,0 +1,68 @@
+.tracks-parent{
+    width: 800px;
+}
+.tracks{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 5px;
+    grid-auto-rows: 125px;
+    grid-auto-columns: 80px;
+    padding: 10px;
+    
+}
+.track{
+    border-radius: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+}
+.track-container
+{
+    width: 280px;
+    border: 1px solid black;
+}
+.tracks-img {
+    height: 100px;
+    width: 100px;
+    object-fit: contain;
+}   
+
+.tracks-imgg {
+    height: 100%; 
+    width: 100%; 
+    object-fit: cover;
+    padding: 0px;
+    border-radius: 0px;
+}
+.tracks-artist {
+    font-size: 20px;
+}
+.tracks-title {
+    font-size: 18px;
+}
+.tracks-date {
+    font-size: 14px;
+}
+.track-len {
+    display: flex;
+    flex-direction: row;
+    height: 25px;
+}
+.track-tags {
+    display: flex;
+    flex-direction: row;
+}
+.track-tag{
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: rgb(221, 221, 221);
+    margin-right:10px;
+}
+.tracks-date{
+    text-align: end;
+}
+.tracks-info{
+    width: 180px;
+}

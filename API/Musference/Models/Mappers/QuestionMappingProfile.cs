@@ -10,6 +10,7 @@ public class QuestionMappingProfile : Profile
     {
         CreateMap<AddQuestionDTO, Question>();
         CreateMap<Question, GetQuestionDto>();
+        CreateMap<Answer, GetAnswerDto>();
         CreateMap<AddAnswerDto, Answer>();
     }
 }

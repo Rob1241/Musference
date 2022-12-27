@@ -18,6 +18,12 @@ namespace Musference.Data
         public DbSet<User> UsersDbSet { get; set; }
 
         public DbSet<Role> Roles { get; set; }
+        public DbSet<ResetCodeModel> PasswordResetDbSet { get; set; }
+        public DbSet<ReportedQuestion> ReportedQuestionsDbSet { get; set; }
+        public DbSet<ReportedTrack> ReportedTracksDbSet { get; set; }
+        public DbSet<ReportedAnswer> ReportedAnswersDbSet { get; set; }
+
+        public DbSet<ReportedUser> ReportedUsersDbSet { get; set; }
 
         public DbSet<Track> TracksDbSet { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

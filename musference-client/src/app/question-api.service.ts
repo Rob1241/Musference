@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -16,4 +16,24 @@ export class QuestionApiService {
   addQuestion(data:any) {
     return this.http.post<any>(this.questionAPIUrl+'/Question',data);
   }
+  //wszystko w dół stad do naprawy
+  getOneQuestion():Observable<any[]> {  
+    return this.http.get<any>(this.questionAPIUrl+'/Question');
+  }
+  plusQuestion(data:any) {
+    return this.http.post<any>(this.questionAPIUrl+'/Question',data);
+  }
+  minusQuestion():Observable<any[]> {  
+    return this.http.get<any>(this.questionAPIUrl+'/Question');
+  }
+  addAnswer(data:any) {
+    return this.http.post<any>(this.questionAPIUrl+'/Question',data);
+  }
+  plusAnswer():Observable<any[]> {  
+    return this.http.get<any>(this.questionAPIUrl+'/Question');
+  }
+  minusAnswer(data:any) {
+    return this.http.post<any>(this.questionAPIUrl+'/Question',data);
+  }
 }
+ 

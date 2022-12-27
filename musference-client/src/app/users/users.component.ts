@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { UserApiService } from '../user-api.service';
 
 @Component({
   selector: 'app-users',
@@ -6,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
+  userList$!:Observable<any[]>;
 
-  constructor() { }
+  constructor(private service:UserApiService) { }
 
   ngOnInit(): void {
+    this.userList$ = this.service.getAllUsers();
   }
 
 }

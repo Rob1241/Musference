@@ -102,5 +102,8 @@
       }
     }
   },
-  "defaultProject": "musference-client"
+  "defaultProject": "musference-client",
+  "cli": {
+    "analytics": false
+  }
 }

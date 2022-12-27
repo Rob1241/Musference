@@ -10,16 +10,37 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Musference.Middleware;
+using MySql.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using MySql.EntityFrameworkCore.Extensions;
+using System.Configuration;
+using System.Security.Principal;
+using CloudinaryDotNet;
+using System.Linq;
+
 
 var builder = WebApplication.CreateBuilder(args);
 string connStr = builder.Configuration.GetConnectionString("robert");
 // Add services to the container.
-builder.Services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(connStr)); 
+builder.Services.AddTransient<Seeder>();
+builder.Services.AddDbContext<DataBaseContext>(options => options.UseMySQL(connStr));
+var cloudName = builder.Configuration.GetValue<string>("AccountSettings:CloudName");
+var apiKey = builder.Configuration.GetValue<string>("AccountSettings:ApiKey");
+var apiSecret = builder.Configuration.GetValue<string>("AccountSettings:ApiSecret");
+//builder.Services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(connStr));
+if (new[] { cloudName, apiSecret, apiKey }.Any(string.IsNullOrWhiteSpace))
+    throw new ArgumentException("Specify Cloudinary account details");
+builder.Services.AddSingleton(new Cloudinary(new Account(cloudName, apiKey, apiSecret)));
+var sgApi = builder.Configuration.GetValue<string>("SendGrid");
+if (new[] { sgApi }.Any(string.IsNullOrWhiteSpace))
+    throw new ArgumentException("Specify SendGrid details");
+builder.Services.AddSingleton(new SendGridKey(sgApi));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var authenticationModel = new AuthenticationModel();
 builder.Configuration.GetSection("Authentication").Bind(authenticationModel);
 builder.Services.AddSingleton(authenticationModel);
-builder.Services.AddTransient<Seeder>();
+//builder.Services.AddDbContext<DataBaseContext>();
+//builder.Services.AddScoped<Seeder>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -42,6 +63,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: myAllowSpecificOrigins,
@@ -52,9 +75,27 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
         });
 });
+
+
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+void Seeder(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<Seeder>();
+        service.Seed();
+    }
+}
+Seeder(app);
 
 if (app.Environment.IsDevelopment())
 {
@@ -75,3 +116,13 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public class MysqlEntityFrameworkDesignTimeServices : IDesignTimeServices
+{
+    public void ConfigureDesignTimeServices(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddEntityFrameworkMySQL();
+        new EntityFrameworkRelationalDesignServicesBuilder(serviceCollection)
+            .TryAddCoreServices();
+    }
+}

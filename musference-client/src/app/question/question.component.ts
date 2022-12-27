@@ -13,8 +13,7 @@ export class QuestionComponent implements OnInit {
   constructor(private service:QuestionApiService) { }
 
   ngOnInit(): void {
-    this.
-    questionList$ = this.service.getQuestionList();
+    this.questionList$ = this.service.getQuestionList();
   }
 
 }

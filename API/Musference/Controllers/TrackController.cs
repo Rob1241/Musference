@@ -17,41 +17,53 @@ namespace Musference.Controllers
         {
             _service = service;
         }
-        [HttpGet]
-        public ActionResult<IEnumerable<GetTrackDto>> GetAllTrack()
+        [HttpGet("Search")]
+        public ActionResult<IEnumerable<GetTrackDto>> SearchTrack([FromBody] string text)
         {
-            var tracklist = _service.GetAllTrack();
+            var tracklist = _service.SearchTrack(text);
             return Ok(tracklist);
         }
+        [HttpGet("{page}")]
+        public ActionResult<IEnumerable<GetTrackDto>> GetAllTrackNewest([FromRoute] int page)
+        {
+            var response = _service.GetAllTrackNewest(page);
+            return Ok(response);
+        }
+        [HttpGet("best_users/{id}")]
+        public ActionResult<IEnumerable<GetTrackDto>> GetAllTrackBestUsers([FromRoute] int page)
+        {
+            var response = _service.GetAllTrackBestUsers(page);
+            return Ok(response);
+        }
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public ActionResult AddTrack(AddTrackDto dto)
         {
-            int id= _service.AddTrack(GetUserId(),dto);
+            var id= _service.AddTrack(GetUserId(),dto);
             return Created($"api/Track/{id}",null);
         }
         [HttpDelete("{id}")]
-        [Authorize]
+        //[Authorize]
         public ActionResult DeleteTrack([FromRoute]int id)
         {
-            _service.DeleteTrack(id);
+            _service.DeleteTrack(id,GetUserId());
             return Ok();
         }
         [HttpPut("{id}/LikeTrack")]
-        [Authorize]
+        //[Authorize]
         public ActionResult LikeTrack([FromRoute] int id)
         {
-            _service.LikeTrack(id);
+            _service.LikeTrack(id,GetUserId());
             return Ok();
         }
-        [HttpPut("{id}/UnLike")]
-        [Authorize]
-        public ActionResult UnLikeTrack([FromRoute] int id)
-        {
-            _service.UnLikeTrack(id);
-            return Ok();
-        }
-        public int GetUserId()
+        //[HttpPut("{id}/UnLike")]
+        ////[Authorize]
+        //public ActionResult UnLikeTrack([FromRoute] int id)
+        //{
+        //    _service.UnLikeTrack(id);
+        //    return Ok();
+        //}
+        protected int GetUserId()
         {
             int id = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
             return id;

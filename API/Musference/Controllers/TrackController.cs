@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Musference.Models.DTOs;
+using Musference.Models.EndpointModels.Track;
 using Musference.Services;
 using System.Security.Claims;
 
@@ -17,10 +18,10 @@ namespace Musference.Controllers
         {
             _service = service;
         }
-        [HttpGet("Search")]
-        public ActionResult<IEnumerable<GetTrackDto>> SearchTrack([FromBody] string text)
+        [HttpGet("Search/{page}/{text}")]
+        public ActionResult<IEnumerable<GetTrackDto>> SearchTrack([FromRoute] string text, [FromRoute] int page)
         {
-            var tracklist = _service.SearchTrack(text);
+            var tracklist = _service.SearchTrack(text, page);
             return Ok(tracklist);
         }
         [HttpGet("{page}")]
@@ -29,28 +30,28 @@ namespace Musference.Controllers
             var response = _service.GetAllTrackNewest(page);
             return Ok(response);
         }
-        [HttpGet("best_users/{id}")]
+        [HttpGet("best_users/{page}")]
         public ActionResult<IEnumerable<GetTrackDto>> GetAllTrackBestUsers([FromRoute] int page)
         {
             var response = _service.GetAllTrackBestUsers(page);
             return Ok(response);
         }
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public ActionResult AddTrack(AddTrackDto dto)
         {
             var id= _service.AddTrack(GetUserId(),dto);
             return Created($"api/Track/{id}",null);
         }
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public ActionResult DeleteTrack([FromRoute]int id)
         {
             _service.DeleteTrack(id,GetUserId());
             return Ok();
         }
         [HttpPut("{id}/LikeTrack")]
-        //[Authorize]
+        [Authorize]
         public ActionResult LikeTrack([FromRoute] int id)
         {
             _service.LikeTrack(id,GetUserId());

@@ -2,16 +2,18 @@
 using Musference.Data;
 using Musference.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Musference.Models;
 using Musference.Exceptions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Musference.Models.EndpointModels;
+using Musference.Logic;
+using CloudinaryDotNet.Actions;
+using Musference.Models.EndpointModels.Track;
+using Musference.Models.Entities;
 
 namespace Musference.Services
 {
     public interface ITrackService
     {
-        public Task<List<GetTrackDto>> SearchTrack(string text);
+        public Task<TrackResponse> SearchTrack(string text, int page);
         public Task<TrackResponse> GetAllTrackNewest(int page);
         public Task<TrackResponse> GetAllTrackBestUsers(int page);
         public Task<int> AddTrack(int id, AddTrackDto dto);
@@ -24,49 +26,31 @@ namespace Musference.Services
     {
         private readonly IMapper _mapper;
         private readonly DataBaseContext _context;
+        private readonly IPagination _pagination;
 
-        public TrackService(DataBaseContext context, IMapper mapper)
+        public TrackService(DataBaseContext context, IMapper mapper,IPagination pagination)
         {
             _mapper = mapper;
             _context = context;
+            _pagination = pagination;
         }
-        public async Task<List<GetTrackDto>> SearchTrack(string text)
+        public async Task<TrackResponse> SearchTrack(string text, int page)
         {
-            List<GetTrackDto> trackListDto = new List<GetTrackDto>();
+            var pageResults = 10f;
             var listToReturn = await _context.TracksDbSet
                                         .Where(c => (c.Artist.ToLower().Contains(text.ToLower()))
                                         || c.Title.ToLower().Contains(text.ToLower()))
                                         .ToListAsync();
-            foreach (var item in listToReturn)
-            {
-                var gettrackdto = _mapper.Map<GetTrackDto>(item);
-                trackListDto.Add(gettrackdto);
-            }
-            return trackListDto;
+            var pageCount = Math.Ceiling(listToReturn.Count() / pageResults);
+            var response = _pagination.TrackPagination(listToReturn, pageResults, page, pageCount);
+            return response;
         }
         public async Task<TrackResponse> GetAllTrackNewest(int page)
         {
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.TracksDbSet.Count() / pageResults);
             var sortedtrack = await _context.TracksDbSet.OrderBy(t => t.DateAdded).ToListAsync();
-            var tracks = sortedtrack
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
-            List<GetTrackDto> trackListDto = new List<GetTrackDto>();
-            foreach (var item in tracks)
-            {
-                var gettrackdto = _mapper.Map<GetTrackDto>(item);
-                trackListDto.Add(gettrackdto);
-            }
-
-            var response = new TrackResponse
-            {
-                Tracks = trackListDto,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
-
+            var response = _pagination.TrackPagination(sortedtrack, pageResults, page, pageCount);
             return response;
         }
         public async Task<TrackResponse> GetAllTrackBestUsers(int page)
@@ -74,30 +58,13 @@ namespace Musference.Services
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.TracksDbSet.Count() / pageResults);
             var sortedtrack = await _context.TracksDbSet.OrderBy(t => t.User.Reputation).ToListAsync();
-            var tracks = sortedtrack
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
-            List<GetTrackDto> trackListDto = new List<GetTrackDto>();
-            foreach (var item in tracks)
-            {
-                var gettrackdto = _mapper.Map<GetTrackDto>(item);
-                trackListDto.Add(gettrackdto);
-            }
-
-            var response = new TrackResponse
-            {
-                Tracks = trackListDto,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
-
+            var response = _pagination.TrackPagination(sortedtrack, pageResults, page, pageCount);
             return response;
         }
         public async Task<int> AddTrack(int userId, AddTrackDto dto)
         {
             var user = await _context.UsersDbSet
-                .Include(t=>t.Tracks)
+                .Include(u=>u.Tracks)
                 .FirstOrDefaultAsync(u=>u.Id == userId);
             if (user == null)
             {
@@ -105,8 +72,8 @@ namespace Musference.Services
             }
             var track = _mapper.Map<Track>(dto);
             track.Artist = user.Name;
-            track.User = user;
-            //user.Tracks.Add(track);
+            await _context.TracksDbSet.AddAsync(track);
+            user.Tracks.Add(track);
             await _context.SaveChangesAsync();
             return track.Id;
         }
@@ -114,48 +81,45 @@ namespace Musference.Services
         {
             var track = await _context.TracksDbSet.FirstOrDefaultAsync(t => t.Id == id);
             if (track == null)
-            {
                 throw new NotFoundException("Track not found");
-            }
             var user = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
-            if (user == null)
-            {
+            if (user == null) 
                 throw new NotFoundException("User not found");
-            }
-            if (track.User.Id == user.Id)
+            if (track.User.Id != user.Id)
             {
-                var tracks = await _context.TracksDbSet.ToListAsync();
-                tracks.Remove(track);
-                await _context.SaveChangesAsync();
+                throw new UnauthorizedException("Unauthorized");
             }
-            //tu jakis error
-            
+            _context.TracksDbSet.Remove(track);
+            await _context.SaveChangesAsync();
+
         }
         public async void LikeTrack(int id, int userId)
         {
-            var track = await _context.TracksDbSet.FirstOrDefaultAsync(t => t.Id == id);
+            var track = await _context.TracksDbSet
+                .Include(t=>t.UsersThatLiked)
+                .FirstOrDefaultAsync(t => t.Id == id);
             if (track == null)
-            {
-                throw new NotFoundException("Track not found");
-            }
-            var user = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
+            throw new NotFoundException("Track not found");
+            var user = await _context.UsersDbSet
+                .Include(u=>u.TracksLiked)
+                .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
-            {
-                throw new NotFoundException("User not found");
-            }
+            throw new NotFoundException("User not found");
+            var trackowner= await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == track.UserId);
             var usersliked = track.UsersThatLiked;
+            if (trackowner == null)
+            throw new NotFoundException("User not found");
             if (usersliked != null)
             {
                 foreach (User userloop in usersliked)
                 {
                     if (userloop.Id == userId)
-                    {
-                        //Tu jakis blad
-                    }
+                        throw new NotFoundException("You can like only once");
                 }
             }
             user.TracksLiked.Add(track);
             track.Likes++;
+            trackowner.Reputation++;
             await _context.SaveChangesAsync();
         }
         //public void UnLikeTrack(int id)

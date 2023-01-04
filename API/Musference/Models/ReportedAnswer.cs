@@ -1,4 +1,6 @@
-﻿namespace Musference.Models
+﻿using Musference.Models.Entities;
+
+namespace Musference.Models
 {
     public class ReportedAnswer
     {

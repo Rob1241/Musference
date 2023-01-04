@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Musference.Models.DTOs;
+using Musference.Models.Entities;
 
 namespace Musference.Models.Mappers;
 

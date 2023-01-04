@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Musference.Models.DTOs;
+using Musference.Models.Entities;
 
 namespace Musference.Models.Mappers
 {
@@ -7,7 +8,8 @@ namespace Musference.Models.Mappers
     {
         public TrackMappingProfile()
         {
-            CreateMap<Track, GetTrackDto>();
+            CreateMap<Track, GetTrackDto>()
+                    .ForMember(t => t.Username, c => c.MapFrom(u => u.User.Name));
             CreateMap<AddTrackDto, Track>();
         }
     }

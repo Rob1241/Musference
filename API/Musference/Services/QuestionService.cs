@@ -3,23 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Musference.Data;
 using Musference.Exceptions;
-using Musference.Models;
+using Musference.Logic;
 using Musference.Models.DTOs;
-using Musference.Models.EndpointModels;
+using Musference.Models.EndpointModels.Question;
+using Musference.Models.Entities;
 
 namespace Musference.Services
 {
     public interface IQuestionService
     {
-        public Task<List<GetQuestionDto>> SearchQuestion(string text);
+        public Task<QuestionsResponse> SearchQuestion(string text,int page);
         public Task<QuestionsResponse> GetAllQuestionsNewest(int page);
         public Task<QuestionsResponse> GetAllQuestionsMostLiked(int page);
         public Task<QuestionsResponse> GetAllQuestionsBestUsers(int page);
+
         public Task<int> AddQuestion(int userID, AddQuestionDTO questiondto);
         //public IEnumerable<GetQuestionDto> GetAllQuestions();
         public Task<OneQuestionResponse> GetQuestion(int id, int page);
 
         public void PlusQuestion(int id, int userId);
+        public void DeleteQuestion(int id, int userId);
+        public void DeleteAnswer(int id, int userId);
         //public void MinusQuestion(int id, int userId);
         public Task<int> AddAnswer(AddAnswerDto dto, int id, int userId);
         public void PlusAnswer(int id, int userId);
@@ -31,41 +35,35 @@ namespace Musference.Services
     {
         public readonly DataBaseContext _context;
         public readonly IMapper _mapper;
-        public QuestionService(DataBaseContext context, IMapper mapper)
+        public readonly IPagination _pagination;
+        public QuestionService(DataBaseContext context, IMapper mapper, IPagination pagination)
         {
             _context = context;
             _mapper = mapper;
+            _pagination = pagination;
         }
-        public async Task<List<GetQuestionDto>> SearchQuestion(string text)
+        public async Task<QuestionsResponse> SearchQuestion(string text, int page)
         {
-            List<GetQuestionDto> questionListDto = new List<GetQuestionDto>();
-            var listToReturn = await _context.QuestionsDbSet
+            var pageResults = 10f;
+            var questionList = await _context.QuestionsDbSet
                                         .Where(c => (c.Content.ToLower().Contains(text.ToLower()))
                                         || c.Heading.ToLower().Contains(text.ToLower()))
                                         .ToListAsync();
-            if(listToReturn==null)
+            var pageCount = Math.Ceiling(questionList.Count() / pageResults);
+            if (questionList==null)
             {
                 throw new NotFoundException("Questions not found");
             }
-            foreach (var item in listToReturn)
-            {
-                var getquestiondto = _mapper.Map<GetQuestionDto>(item);
-                questionListDto.Add(getquestiondto);
-            }
-            return questionListDto;
+            var response = _pagination.QuestionPagination(questionList, pageResults, page, pageCount);
+            return response;
         }
         public async Task<int> AddQuestion(int userId, AddQuestionDTO questiondto)
         {
             var new_question = _mapper.Map<Question>(questiondto);
-            //var user = _context.UsersDbSet.FirstOrDefault(u => u.Id == userId);
-            
             new_question.DateAdded = DateTime.Now;
-            new_question.User = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);//to chyba wystarczy jesli chodzi o relacje
+            new_question.User = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
             if (new_question.User == null)
-            {
                 throw new NotFoundException("User not found");
-            }
-            //user.Questions.Add(new_question); a jak nie to jeszcze to
             await _context.QuestionsDbSet.AddAsync(new_question);
             await _context.SaveChangesAsync();
             return new_question.Id;
@@ -86,24 +84,7 @@ namespace Musference.Services
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
             var sortedquestion = await _context.QuestionsDbSet.OrderBy(q=>q.DateAdded).ToListAsync();
-            var questions = sortedquestion
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
-            List<GetQuestionDto> questionListDto = new List<GetQuestionDto>();
-            foreach (var item in questions)
-            {
-                var getquestiondto = _mapper.Map<GetQuestionDto>(item);
-                questionListDto.Add(getquestiondto);
-            }
-
-            var response = new QuestionsResponse
-            {
-                Questions = questionListDto,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
-
+            var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
         public async Task<QuestionsResponse> GetAllQuestionsMostLiked(int page)
@@ -111,24 +92,7 @@ namespace Musference.Services
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
             var sortedquestion = await _context.QuestionsDbSet.OrderBy(q => q.Pluses).ToListAsync();
-            var questions = sortedquestion
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
-            List<GetQuestionDto> questionListDto = new List<GetQuestionDto>();
-            foreach (var item in questions)
-            {
-                var getquestiondto = _mapper.Map<GetQuestionDto>(item);
-                questionListDto.Add(getquestiondto);
-            }
-
-            var response = new QuestionsResponse
-            {
-                Questions = questionListDto,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
-
+            var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
         public async Task<QuestionsResponse> GetAllQuestionsBestUsers(int page)
@@ -136,24 +100,7 @@ namespace Musference.Services
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
             var sortedquestion = await _context.QuestionsDbSet.OrderBy(q => q.User.Reputation).ToListAsync();
-            var questions = sortedquestion
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
-            List<GetQuestionDto> questionListDto = new List<GetQuestionDto>();
-            foreach (var item in questions)
-            {
-                var getquestiondto = _mapper.Map<GetQuestionDto>(item);
-                questionListDto.Add(getquestiondto);
-            }
-
-            var response = new QuestionsResponse
-            {
-                Questions = questionListDto,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
-
+            var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
         public async Task<OneQuestionResponse> GetQuestion(int id, int page)
@@ -168,39 +115,25 @@ namespace Musference.Services
             {
                 throw new NotFoundException("Question not found");
             }
+            question.Views++;
             var answers = question.Answers
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToList();
-            List<GetAnswerDto> answerListDto = new List<GetAnswerDto>();
-            foreach (var item in answers)
-            {
-                var getanswerdto = _mapper.Map<GetAnswerDto>(item);
-                answerListDto.Add(getanswerdto);
-            }
-            question.Views++;
-            var questionDto = _mapper.Map<GetQuestionDto>(question);
-            var response = new OneQuestionResponse
-            {
-                Answers = answerListDto,
-                CurrentPage = page,
-                Pages = (int)pageCount,
-                Question = questionDto
-            };
+            var response = _pagination.AnswerPagination(answers, pageResults, page, pageCount,question);
             return response;
         }
         public async void PlusQuestion(int id, int userId)
         {
-            var question = await _context.QuestionsDbSet.FirstOrDefaultAsync(u => u.Id == id);
-            var user = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new NotFoundException("User not found");
-            }
-            if (question == null)
-            {
-                throw new NotFoundException("Question not found");
-            }
+            var question = await _context.QuestionsDbSet
+                .Include(q=>q.UsersThatLiked)
+                .Include(q=>q.User)
+                .FirstOrDefaultAsync(q => q.Id == id);
+            var user = await _context.UsersDbSet
+                .Include(u=>u.QuestionsLiked)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)throw new NotFoundException("User not found");
+            if (question == null)throw new NotFoundException("Question not found");
             var usersliked = question.UsersThatLiked;
             if (usersliked != null)
             {
@@ -208,10 +141,11 @@ namespace Musference.Services
                 {
                     if (userloop.Id == userId)
                     {
-                        //Tu jakis blad
+                        throw new NotFoundException("You can like only once");
                     }
                 }
             }
+            if(user.QuestionsLiked==null)throw new NotFoundException("empty questions");
             user.QuestionsLiked.Add(question);
             question.User.Reputation += 5;
             question.Pluses++;
@@ -238,49 +172,71 @@ namespace Musference.Services
         //}
         public async Task<int> AddAnswer(AddAnswerDto dto, int id, int userId)
         {
-            var answer = _mapper.Map<Answer>(dto);
-            var question = await _context.QuestionsDbSet.FirstOrDefaultAsync(q => q.Id == id);
-            answer.User = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id ==  userId);
-            if (question == null)
-            {
+            var new_answer = _mapper.Map<Answer>(dto);
+            new_answer.Question = await _context.QuestionsDbSet.FirstOrDefaultAsync(q => q.Id == id);
+            new_answer.User = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
+            new_answer.DateAdded = DateTime.Now;
+            if (new_answer.Question == null)
                 throw new NotFoundException("Question not found");
-            }
-            if (answer.User == null)
-            {
+            if (new_answer.User == null)
                 throw new NotFoundException("User not found");
-            }
-            question.AnswersAmount++;
-            answer.Question = question;
-            //question.Answers.Add(answer);
+            new_answer.Question.AnswersAmount++;
+            await _context.AnswersDbSet.AddAsync(new_answer);
             await _context.SaveChangesAsync();
-            return question.Id;
+            return new_answer.Id;
         }
         public async void PlusAnswer(int id, int userId)
         {
-            var answer = await _context.AnswersDbSet.FirstOrDefaultAsync(u => u.Id == id);
-            var user = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
+            var answer = await _context.AnswersDbSet
+                .Include(a=>a.UsersThatLiked)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            var user = await _context.UsersDbSet
+                .Include(u=>u.AnswersLiked)
+                .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
-            {
                 throw new NotFoundException("User not found");
-            }
             if (answer == null)
-            {
                 throw new NotFoundException("Answer not found");
-            }
             var usersliked = answer.UsersThatLiked;
             if (usersliked != null)
             {
                 foreach (User userloop in usersliked)
                 {
                     if (userloop.Id == userId)
-                    {
-                        //Tu jakis blad
-                    }
+                        throw new NotFoundException("You can like only once");
                 }
             }
             user.AnswersLiked.Add(answer);
-            answer.User.Reputation += 5;
+            var answeruser = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == answer.UserId);
+            answeruser.Reputation += 5;
             answer.Pluses++;
+            await _context.SaveChangesAsync();
+        }
+        public async void DeleteQuestion(int id, int userId)
+        {
+            var question = await _context.QuestionsDbSet
+                .Include(q=>q.Answers)
+                .FirstOrDefaultAsync(q => q.Id == id);
+            if (question == null)
+                throw new NotFoundException("Question not found");
+            if (question.UserId != userId)
+                throw new UnauthorizedException("Unauthorizes method");
+            var answers = question.Answers;
+            foreach(Answer answer in answers)
+            {
+                _context.AnswersDbSet.Remove(answer);
+            }
+            _context.QuestionsDbSet.Remove(question);
+            await _context.SaveChangesAsync();
+        }
+        public async void DeleteAnswer(int id, int userId)
+        {   
+            var answer = await _context.AnswersDbSet.FirstOrDefaultAsync(a => a.Id == id);
+            if (answer == null)
+                throw new NotFoundException("Answer not found");
+            if(answer.UserId != userId)
+                throw new UnauthorizedException("Unauthorizes method");
+            _context.AnswersDbSet.Remove(answer);
             await _context.SaveChangesAsync();
         }
         //public void ReportQuestion(int id, int userId, string reason)

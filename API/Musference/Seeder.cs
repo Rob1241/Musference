@@ -1,5 +1,5 @@
 ﻿using Musference.Data;
-using Musference.Models;
+using Musference.Models.Entities;
 
 namespace Musference
 {

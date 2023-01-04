@@ -4,7 +4,7 @@ using Musference.Data;
 using Musference.Exceptions;
 using Musference.Models;
 using Musference.Models.DTOs;
-using Musference.Models.EndpointModels;
+using Musference.Models.EndpointModels.Tag;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Musference.Services

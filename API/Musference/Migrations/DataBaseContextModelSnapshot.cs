@@ -19,7 +19,22 @@ namespace Musference.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Musference.Models.Answer", b =>
+            modelBuilder.Entity("AnswerUser", b =>
+                {
+                    b.Property<int>("AnswersLikedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersThatLikedId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AnswersLikedId", "UsersThatLikedId");
+
+                    b.HasIndex("UsersThatLikedId");
+
+                    b.ToTable("AnswerUser");
+                });
+
+            modelBuilder.Entity("Musference.Models.Entities.Answer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,18 +47,11 @@ namespace Musference.Migrations
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Minuses")
-                        .HasColumnType("int");
-
                     b.Property<int>("Pluses")
                         .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -57,7 +65,7 @@ namespace Musference.Migrations
                     b.ToTable("AnswersDbSet");
                 });
 
-            modelBuilder.Entity("Musference.Models.Question", b =>
+            modelBuilder.Entity("Musference.Models.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,9 +85,6 @@ namespace Musference.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Minuses")
-                        .HasColumnType("int");
-
                     b.Property<int>("Pluses")
                         .HasColumnType("int");
 
@@ -96,7 +101,7 @@ namespace Musference.Migrations
                     b.ToTable("QuestionsDbSet");
                 });
 
-            modelBuilder.Entity("Musference.Models.Role", b =>
+            modelBuilder.Entity("Musference.Models.Entities.Role", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -111,11 +116,14 @@ namespace Musference.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("Musference.Models.Tag", b =>
+            modelBuilder.Entity("Musference.Models.Entities.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -126,11 +134,15 @@ namespace Musference.Migrations
                     b.ToTable("TagsDbSet");
                 });
 
-            modelBuilder.Entity("Musference.Models.Track", b =>
+            modelBuilder.Entity("Musference.Models.Entities.Track", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Artist")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime(6)");
@@ -158,13 +170,16 @@ namespace Musference.Migrations
                     b.ToTable("TracksDbSet");
                 });
 
-            modelBuilder.Entity("Musference.Models.User", b =>
+            modelBuilder.Entity("Musference.Models.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Contact")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Country")
@@ -220,6 +235,21 @@ namespace Musference.Migrations
                     b.ToTable("QuestionTag");
                 });
 
+            modelBuilder.Entity("QuestionUser", b =>
+                {
+                    b.Property<int>("QuestionsLikedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersThatLikedId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuestionsLikedId", "UsersThatLikedId");
+
+                    b.HasIndex("UsersThatLikedId");
+
+                    b.ToTable("QuestionUser");
+                });
+
             modelBuilder.Entity("TagTrack", b =>
                 {
                     b.Property<int>("TagsId")
@@ -235,31 +265,46 @@ namespace Musference.Migrations
                     b.ToTable("TagTrack");
                 });
 
-            modelBuilder.Entity("UserUser", b =>
+            modelBuilder.Entity("TrackUser", b =>
                 {
-                    b.Property<int>("FollowedUsersId")
+                    b.Property<int>("TracksLikedId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FollowingUsersId")
+                    b.Property<int>("UsersThatLikedId")
                         .HasColumnType("int");
 
-                    b.HasKey("FollowedUsersId", "FollowingUsersId");
+                    b.HasKey("TracksLikedId", "UsersThatLikedId");
 
-                    b.HasIndex("FollowingUsersId");
+                    b.HasIndex("UsersThatLikedId");
 
-                    b.ToTable("UserUser");
+                    b.ToTable("TrackUser");
                 });
 
-            modelBuilder.Entity("Musference.Models.Answer", b =>
+            modelBuilder.Entity("AnswerUser", b =>
                 {
-                    b.HasOne("Musference.Models.Question", "Question")
+                    b.HasOne("Musference.Models.Entities.Answer", null)
+                        .WithMany()
+                        .HasForeignKey("AnswersLikedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Musference.Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersThatLikedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Musference.Models.Entities.Answer", b =>
+                {
+                    b.HasOne("Musference.Models.Entities.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Musference.Models.User", "User")
-                        .WithMany()
+                    b.HasOne("Musference.Models.Entities.User", "User")
+                        .WithMany("Answers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -269,10 +314,10 @@ namespace Musference.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Musference.Models.Question", b =>
+            modelBuilder.Entity("Musference.Models.Entities.Question", b =>
                 {
-                    b.HasOne("Musference.Models.User", "User")
-                        .WithMany()
+                    b.HasOne("Musference.Models.Entities.User", "User")
+                        .WithMany("Questions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -280,9 +325,9 @@ namespace Musference.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Musference.Models.Track", b =>
+            modelBuilder.Entity("Musference.Models.Entities.Track", b =>
                 {
-                    b.HasOne("Musference.Models.User", "User")
+                    b.HasOne("Musference.Models.Entities.User", "User")
                         .WithMany("Tracks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -291,9 +336,9 @@ namespace Musference.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Musference.Models.User", b =>
+            modelBuilder.Entity("Musference.Models.Entities.User", b =>
                 {
-                    b.HasOne("Musference.Models.Role", "Role")
+                    b.HasOne("Musference.Models.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -304,56 +349,75 @@ namespace Musference.Migrations
 
             modelBuilder.Entity("QuestionTag", b =>
                 {
-                    b.HasOne("Musference.Models.Question", null)
+                    b.HasOne("Musference.Models.Entities.Question", null)
                         .WithMany()
                         .HasForeignKey("QuestionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Musference.Models.Tag", null)
+                    b.HasOne("Musference.Models.Entities.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("QuestionUser", b =>
+                {
+                    b.HasOne("Musference.Models.Entities.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsLikedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Musference.Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersThatLikedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("TagTrack", b =>
                 {
-                    b.HasOne("Musference.Models.Tag", null)
+                    b.HasOne("Musference.Models.Entities.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Musference.Models.Track", null)
+                    b.HasOne("Musference.Models.Entities.Track", null)
                         .WithMany()
                         .HasForeignKey("TracksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UserUser", b =>
+            modelBuilder.Entity("TrackUser", b =>
                 {
-                    b.HasOne("Musference.Models.User", null)
+                    b.HasOne("Musference.Models.Entities.Track", null)
                         .WithMany()
-                        .HasForeignKey("FollowedUsersId")
+                        .HasForeignKey("TracksLikedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Musference.Models.User", null)
+                    b.HasOne("Musference.Models.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("FollowingUsersId")
+                        .HasForeignKey("UsersThatLikedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Musference.Models.Question", b =>
+            modelBuilder.Entity("Musference.Models.Entities.Question", b =>
                 {
                     b.Navigation("Answers");
                 });
 
-            modelBuilder.Entity("Musference.Models.User", b =>
+            modelBuilder.Entity("Musference.Models.Entities.User", b =>
                 {
+                    b.Navigation("Answers");
+
+                    b.Navigation("Questions");
+
                     b.Navigation("Tracks");
                 });
 #pragma warning restore 612, 618

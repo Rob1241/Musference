@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Musference.Models;
-using Musference.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Musference.Models.DTOs;
-using Microsoft.AspNetCore.Authorization;
+using Musference.Models.Entities;
+using Musference.Services;
 using System.Security.Claims;
 
 namespace Musference.Controllers
@@ -18,10 +18,10 @@ namespace Musference.Controllers
             _service = service;
         }
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public ActionResult AddQuestion([FromBody] AddQuestionDTO questiondto)
         {
-            var id = _service.AddQuestion(GetUserId(),questiondto);
+            var id = _service.AddQuestion(GetUserId(), questiondto);
             return Created($"/api/Question/{id}", null);
         }
         //[HttpGet]
@@ -36,31 +36,30 @@ namespace Musference.Controllers
             var list = _service.GetAllQuestionsNewest(page);
             return Ok(list);
         }
-        [HttpGet("{page}")]
+        [HttpGet("most-liked/{page}")]
         public ActionResult<IEnumerable<GetQuestionDto>> GetAllQuestionsMostLiked([FromRoute] int page)
         {
             var list = _service.GetAllQuestionsMostLiked(page);
             return Ok(list);
         }
-        [HttpGet("{page}")]
+        [HttpGet("best-users/{page}")]
         public ActionResult<IEnumerable<GetQuestionDto>> GetAllQuestionsBestUsers([FromRoute] int page)
         {
             var list = _service.GetAllQuestionsBestUsers(page);
             return Ok(list);
         }
-        [HttpGet("Search")]
-        public ActionResult<IEnumerable<GetQuestionDto>> SearchQuestion([FromBody] string text)
+        [HttpGet("Search/{page}/{text}")]
+        public ActionResult<IEnumerable<GetQuestionDto>> SearchQuestion([FromRoute] string text, [FromRoute] int page)
         {
-            var list = _service.SearchQuestion(text);
+            var list = _service.SearchQuestion(text, page);
             return Ok(list);
         }
-        [HttpGet("{id}/{pageid}")]//do ogarniecia
+        [HttpGet("OneQuestion/{id}/{page}")]
         public ActionResult GetQuestion([FromRoute] int id, [FromRoute] int page)
         {
             var question = _service.GetQuestion(id, page);
             return Ok(question);
         }
-
         [HttpPut("Plus/{id}")]
         [Authorize]
         public ActionResult PlusQuestion([FromRoute] int id)
@@ -79,14 +78,28 @@ namespace Musference.Controllers
         [Authorize]
         public ActionResult AddAnswer([FromBody] AddAnswerDto dto, [FromRoute] int id)
         {
-            var answer_id = _service.AddAnswer(dto, id,GetUserId());
-            return Created($"api/Answer/{answer_id}",null);
+            var answer_id = _service.AddAnswer(dto, id, GetUserId());
+            return Created($"api/Answer/{answer_id}", null);
         }
         [HttpPut("Answer/{id}/Plus")]
         [Authorize]
         public ActionResult PlusAnswer([FromRoute] int id)
         {
             _service.PlusAnswer(id, GetUserId());
+            return Ok();
+        }
+        [HttpDelete("{id}/Delete)")]
+        [Authorize]
+        public ActionResult DeleteQuestion([FromRoute] int id)
+        {
+            _service.DeleteQuestion(id, GetUserId());
+            return Ok();
+        }
+        [HttpDelete("Answer/{id}/Delete)")]
+        [Authorize]
+        public ActionResult DeleteAnswer([FromRoute] int id)
+        {
+            _service.DeleteAnswer(id, GetUserId());
             return Ok();
         }
         //[HttpPut("Answer/{id}/Minus")]

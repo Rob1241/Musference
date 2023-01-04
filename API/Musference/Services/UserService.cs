@@ -8,7 +8,6 @@ using Musference.Data;
 using Musference.Exceptions;
 using Musference.Models;
 using Musference.Models.DTOs;
-using Musference.Models.EndpointModels;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,7 +15,9 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Musference.Cloudinary;
+using Musference.Logic;
+using Musference.Models.EndpointModels.User;
+using Musference.Models.Entities;
 
 namespace Musference.Services
 {
@@ -29,16 +30,16 @@ namespace Musference.Services
         public void ChangeDescription(ChangeDescription description, int id);
         public void ChangeEmail(ChangeEmail email,int id);
         public Task<GetUserDto> GetUser(int id);
-        public Task<List<GetUserDto>> SearchUsers(string text);
+        public Task<UsersResponse> SearchUsers(string text, int page);
         public Task<UsersResponse> GetAllUsersReputation(int page);
         public Task<UsersResponse> GetAllUsersNewest(int page);
         public void ChangeCity(ChangeCity city, int id);
         public void ChangeContact(ChangeContact contact, int id);
         public void ChangeCountry(ChangeCountry country, int id);
-        public Task<int> ReportUser(int id, int userId, ReportModel model);
-        public Task<ReportedUsersResponse> GetReportedUsers(int page);
+        //public Task<int> ReportUser(int id, int userId, ReportModel model);
+        //public Task<ReportedUsersResponse> GetReportedUsers(int page);
         public void DeleteUser(int id, DeleteUser model);
-        public void DeleteUserAdmin(DeleteUserAdmin model);
+        //public void DeleteUserAdmin(DeleteUserAdmin model);
         //public void ResetPassword(ResetPasswordModel model);
         //public void SendResetCode(PasswordResetEmail mail);
     }
@@ -48,26 +49,27 @@ namespace Musference.Services
         private readonly DataBaseContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IMapper _mapper;
-        private readonly SendGridKey _sgKey;
-        private readonly Cloudinaryhandler _cloudinary;
+        //private readonly SendGridKey _sgKey;
+        private readonly ICloudinaryhandler _cloudinary;
+        private readonly IPagination _pagination;
 
-        public UserService(DataBaseContext context, IPasswordHasher<User> passwordHasher, AuthenticationModel authenticationModel,IMapper mapper, SendGridKey sgKey, Cloudinaryhandler cloudinary)
+        public UserService(DataBaseContext context, IPasswordHasher<User> passwordHasher, AuthenticationModel authenticationModel,IMapper mapper, ICloudinaryhandler cloudinary,IPagination pagination)
         {
             _authenticationModel = authenticationModel;
             _context = context;
             _passwordHasher = passwordHasher;
-            _sgKey = sgKey;
             _mapper = mapper;
             _cloudinary = cloudinary;
+            _pagination = pagination;
         }
         public async void Signup(SignupModel dto)
         {
-            byte[] newSalt = new byte[128 / 8];
+            //byte[] newSalt = new byte[128 / 8];
 
-            using (var rngCsp = new RNGCryptoServiceProvider())
-            {
-                rngCsp.GetNonZeroBytes(newSalt);
-            }
+            //using (var rngCsp = new RNGCryptoServiceProvider())
+            //{
+            //    rngCsp.GetNonZeroBytes(newSalt);
+            //}
             if(await _context.UsersDbSet.AnyAsync(u => u.Email == dto.Email)){
                 throw new NotFoundException("Email already exists");
             }
@@ -82,9 +84,8 @@ namespace Musference.Services
                 Email = dto.Email,
                 Login = dto.Login,
                 Name = dto.Name,
-                RoleId = dto.RoleId,
                 DateAdded = DateTime.Now,
-                Salt = newSalt
+                //Salt = newSalt
             };
             var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
             user.HashedPassword = hashedPassword;
@@ -230,6 +231,8 @@ namespace Musference.Services
             {
                 throw new NotFoundException("User not found");
             }
+            if(await _context.UsersDbSet.AnyAsync(u => u.Email == email.Email))
+                throw new NotFoundException("Email already exists");
             user.Email = email.Email;
             await _context.SaveChangesAsync();
         }
@@ -258,21 +261,7 @@ namespace Musference.Services
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.UsersDbSet.Count() / pageResults);
             var sortedusers = await _context.UsersDbSet.OrderBy(u => u.Reputation).ToListAsync();
-            var users = sortedusers
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
-            var usersdto = new List<GetUserDto>();
-            foreach (var item in users)
-            {
-                usersdto.Add(_mapper.Map<GetUserDto>(item));
-            }
-            var response = new UsersResponse
-            {
-                Questions = usersdto,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
+            var response = _pagination.UserPagination(sortedusers, pageResults,page, pageCount);
             return response;
         }
         public async Task<UsersResponse> GetAllUsersNewest(int page)
@@ -280,79 +269,63 @@ namespace Musference.Services
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.UsersDbSet.Count() / pageResults);
             var sortedusers = await _context.UsersDbSet.OrderBy(u => u.DateAdded).ToListAsync();
-            var users = sortedusers
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToList();
-            var usersdto = new List<GetUserDto>();
-            foreach (var item in users)
-            {
-                usersdto.Add(_mapper.Map<GetUserDto>(item));
-            }
-            var response = new UsersResponse
-            {
-                Questions = usersdto,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
+            var response = _pagination.UserPagination(sortedusers, pageResults, page, pageCount);
             return response;
         }
-        public async Task<List<GetUserDto>> SearchUsers(string text)
+        public async Task<UsersResponse> SearchUsers(string text, int page)
         {
             List<GetUserDto> userListDto = new List<GetUserDto>();
-            var listToReturn = await _context.UsersDbSet
+            var pageResults = 10f;
+            var usersList = await _context.UsersDbSet
                                         .Where(u => (u.Name.ToLower().Contains(text.ToLower())))
                                         .ToListAsync();
-            if (listToReturn == null)
+            if (usersList == null)
             {
                 throw new NotFoundException("Users not found");
             }
-            foreach (var item in listToReturn)
-            {
-                var getuserdto = _mapper.Map<GetUserDto>(item);
-                userListDto.Add(getuserdto);
-            }
-            return userListDto;
-        }
-        public async Task<ReportedUsersResponse> GetReportedUsers(int page)
-        {
-            var pageResults = 10f;
-            var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
-            var users = await _context.ReportedUsersDbSet
-                .Skip((page - 1) * (int)pageResults)
-                .Take((int)pageResults)
-                .ToListAsync();
-            var response = new ReportedUsersResponse
-            {
-                ReportedUsers = users,
-                CurrentPage = page,
-                Pages = (int)pageCount
-            };
+            var pageCount = Math.Ceiling(usersList.Count() / pageResults);
+            var response = _pagination.UserPagination(usersList, pageResults, page, pageCount);
             return response;
         }
-        public async Task<int> ReportUser(int id, int userId, ReportModel Model)
-        {
-            var usertoreport = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == id);
-            if (usertoreport == null)
-            {
-                throw new NotFoundException("User to report not found");
-            }
-            var reportinguser = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
-            if (reportinguser == null)
-            {
-                throw new NotFoundException("Reporting user not found");
-            }
-            string reason = Model.reason;
-            var new_report = new ReportedUser()
-            {
-                ReporteddUser = usertoreport,
-                UserThatReported = reportinguser,
-                reason = reason
-            };
-            await _context.ReportedUsersDbSet.AddAsync(new_report);
-            await _context.SaveChangesAsync();
-            return new_report.Id;
-        }
+        //public async Task<ReportedUsersResponse> GetReportedUsers(int page)
+        //{
+        //    var pageResults = 10f;
+        //    var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
+        //    var users = await _context.ReportedUsersDbSet
+        //        .Skip((page - 1) * (int)pageResults)
+        //        .Take((int)pageResults)
+        //        .ToListAsync();
+        //    var response = new ReportedUsersResponse
+        //    {
+        //        ReportedUsers = users,
+        //        CurrentPage = page,
+        //        Pages = (int)pageCount
+        //    };
+        //    return response;
+        //}
+        //public async Task<int> ReportUser(int id, int userId, ReportModel Model)
+        //{
+        //    var usertoreport = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == id);
+        //    if (usertoreport == null)
+        //    {
+        //        throw new NotFoundException("User to report not found");
+        //    }
+        //    var reportinguser = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
+        //    if (reportinguser == null)
+        //    {
+        //        throw new NotFoundException("Reporting user not found");
+        //    }
+        //    string reason = Model.reason;
+        //    var new_report = new ReportedUser()
+        //    {
+        //        ReporteddUser = usertoreport,
+        //        UserThatReported = reportinguser,
+        //        reason = reason
+        //    };
+        //    await _context.ReportedUsersDbSet.AddAsync(new_report);
+        //    await _context.SaveChangesAsync();
+        //    return new_report.Id;
+        //}
         public async void DeleteUser(int id, DeleteUser model) 
         {
             var user = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == id);
@@ -396,43 +369,43 @@ namespace Musference.Services
             _context.UsersDbSet.Remove(user);
             await _context.SaveChangesAsync();
         }
-        public async void DeleteUserAdmin(DeleteUserAdmin model)
-        {
-                var user =await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Name == model.Name);
-                if (user == null)
-                {
-                    throw new NotFoundException("User not found");
-                }
-                if (user.Tracks.Count() > 0)
-                {
-                    for (int i = 0; i < user.Tracks.Count(); i++)
-                    {
-                        int trackid = user.Tracks[i].Id;
-                        var track = _context.TracksDbSet.FirstOrDefault(t => t.Id == trackid);
-                        _context.TracksDbSet.Remove(track);
-                    }
-                }
-                if (user.Tracks.Count() > 0)
-                {
-                    for (int i = 0; i < user.Questions.Count(); i++)
-                    {
-                        int questionid = user.Questions[i].Id;
-                        var question = _context.QuestionsDbSet.FirstOrDefault(t => t.Id == questionid);
-                        _context.QuestionsDbSet.Remove(question);
-                    }
-                }
-                if (user.Tracks.Count() > 0)
-                {
-                    for (int i = 0; i < user.Answers.Count(); i++)
-                    {
-                        int answerid = user.Answers[i].Id;
-                        var answer = _context.AnswersDbSet.FirstOrDefault(t => t.Id == answerid);
-                        _context.AnswersDbSet.Remove(answer);
-                    }
-                }
-                _context.UsersDbSet.Remove(user);
-                await _context.SaveChangesAsync();
-        }
+        //public async void DeleteUserAdmin(DeleteUserAdmin model)
+        //{
+        //        var user =await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Name == model.Name);
+        //        if (user == null)
+        //        {
+        //            throw new NotFoundException("User not found");
+        //        }
+        //        if (user.Tracks.Count() > 0)
+        //        {
+        //            for (int i = 0; i < user.Tracks.Count(); i++)
+        //            {
+        //                int trackid = user.Tracks[i].Id;
+        //                var track = _context.TracksDbSet.FirstOrDefault(t => t.Id == trackid);
+        //                _context.TracksDbSet.Remove(track);
+        //            }
+        //        }
+        //        if (user.Tracks.Count() > 0)
+        //        {
+        //            for (int i = 0; i < user.Questions.Count(); i++)
+        //            {
+        //                int questionid = user.Questions[i].Id;
+        //                var question = _context.QuestionsDbSet.FirstOrDefault(t => t.Id == questionid);
+        //                _context.QuestionsDbSet.Remove(question);
+        //            }
+        //        }
+        //        if (user.Tracks.Count() > 0)
+        //        {
+        //            for (int i = 0; i < user.Answers.Count(); i++)
+        //            {
+        //                int answerid = user.Answers[i].Id;
+        //                var answer = _context.AnswersDbSet.FirstOrDefault(t => t.Id == answerid);
+        //                _context.AnswersDbSet.Remove(answer);
+        //            }
+        //        }
+        //        _context.UsersDbSet.Remove(user);
+        //        await _context.SaveChangesAsync();
+        //}
         //private string CreateCode()
         //{
         //    char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();

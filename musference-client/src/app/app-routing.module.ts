@@ -8,16 +8,21 @@ import { SignupComponent } from './signup/signup.component';
 import { UsersComponent } from './users/users.component';
 import { OneQuestionComponent } from './one-question/one-question.component';
 import { TracksComponent } from './tracks/tracks.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { AddtrackComponent } from './tracks/addtrack/addtrack.component';
 
 const routes: Routes = [
-  { path:'account',component:AccountComponent},
-   { path:'users',component:UsersComponent},
+  { path:'account/:id',component:AccountComponent},
+   { path:'users/:page',component:UsersComponent},
    { path:'login',component:LoginComponent},
    { path:'signup',component:SignupComponent},
    { path:'askquestion',component:AskQuestionComponent},
+   { path:'questions/:page',component:QuestionComponent},
    { path:'questions',component:QuestionComponent},
-   { path:'onequestion',component:OneQuestionComponent},
-   {path:'tracks',component:TracksComponent}
+   { path:'onequestion/:id/:page',component:OneQuestionComponent},
+   {path:'tracks/:page',component:TracksComponent},
+   {path:'edit-profile', component:EditProfileComponent},
+   {path:'addtrack', component:AddtrackComponent}
 ];
 
 @NgModule({
@@ -26,4 +31,5 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 export const routingComponents = [AccountComponent,UsersComponent,
-  LoginComponent,SignupComponent,AskQuestionComponent,QuestionComponent,OneQuestionComponent,TracksComponent];
+  LoginComponent,SignupComponent,AskQuestionComponent,QuestionComponent
+  ,OneQuestionComponent,TracksComponent, AddtrackComponent];

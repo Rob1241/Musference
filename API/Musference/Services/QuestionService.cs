@@ -83,7 +83,9 @@ namespace Musference.Services
         {
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
-            var sortedquestion = await _context.QuestionsDbSet.OrderBy(q=>q.DateAdded).ToListAsync();
+            var sortedquestion = await _context.QuestionsDbSet
+                .Include(q=>q.User)
+                .OrderBy(q=>q.DateAdded).ToListAsync();
             var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
@@ -91,7 +93,9 @@ namespace Musference.Services
         {
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
-            var sortedquestion = await _context.QuestionsDbSet.OrderBy(q => q.Pluses).ToListAsync();
+            var sortedquestion = await _context.QuestionsDbSet
+                .Include(q=>q.User)
+                .OrderByDescending(q => q.Pluses).ToListAsync();
             var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
@@ -99,7 +103,9 @@ namespace Musference.Services
         {
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
-            var sortedquestion = await _context.QuestionsDbSet.OrderBy(q => q.User.Reputation).ToListAsync();
+            var sortedquestion = await _context.QuestionsDbSet
+                .Include(q => q.User)
+                .OrderByDescending(q => q.User.Reputation).ToListAsync();
             var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
@@ -108,7 +114,9 @@ namespace Musference.Services
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
             var question = await _context.QuestionsDbSet
+                .Include(q=>q.User)
                 .Include(q => q.Answers)
+                .ThenInclude(a=>a.User)
                 .Include(q => q.Tags)
                 .FirstOrDefaultAsync(q => q.Id == id);
             if (question == null)
@@ -116,6 +124,7 @@ namespace Musference.Services
                 throw new NotFoundException("Question not found");
             }
             question.Views++;
+            await _context.SaveChangesAsync();
             var answers = question.Answers
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
@@ -173,8 +182,10 @@ namespace Musference.Services
         public async Task<int> AddAnswer(AddAnswerDto dto, int id, int userId)
         {
             var new_answer = _mapper.Map<Answer>(dto);
-            new_answer.Question = await _context.QuestionsDbSet.FirstOrDefaultAsync(q => q.Id == id);
-            new_answer.User = await _context.UsersDbSet.FirstOrDefaultAsync(u => u.Id == userId);
+            new_answer.Question = await _context.QuestionsDbSet
+                .FirstOrDefaultAsync(q => q.Id == id);
+            new_answer.User = await _context.UsersDbSet
+                .FirstOrDefaultAsync(u => u.Id == userId);
             new_answer.DateAdded = DateTime.Now;
             if (new_answer.Question == null)
                 throw new NotFoundException("Question not found");

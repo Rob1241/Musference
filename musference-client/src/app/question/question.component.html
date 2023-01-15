@@ -1,30 +1,45 @@
 
 <div class="head-question">
     <h1>All questions</h1>
-    <div class="askquest" routerLink="askquestion">
+    <div class="askquest" (click)="routetoask()">
         New question
     </div>
+    <div class="question-bar">
+        <form [formGroup]="form">
+            <!-- <button class="bar-elem question-search"
+            [routerLink]="'/questions'"
+            [queryParams]="{function: 'search',search:searchtext}"
+            >Search</button> -->
+            <button class="bar-elem question-search" (click)="onSearch()"
+            >Search</button>
+            <input class="question-search-inp" id="search" #search formControlName="search">
+        </form>
+        <button (click)="onSearch()" class="bar-elem question-mostliked"
+        [routerLink]="'/questions'"
+        [queryParams]="{function:'mostliked'}">Most Liked</button>
+        <button class="bar-elem question-bestusers"
+        [routerLink]="'/questions'"
+        [queryParams]="{function:'bestusers'}"
+        >Best Users</button>
+    </div>
 </div>
-<div class="question-oper">
-    2 questions
-</div>
-<!-- <div class="question" *ngFor="let item of questionsList$|async">
+
+
+<div class="question" *ngFor="let item of questions.result.questions">
     <div class="question-left">
         <div class="left-left">
-            <div class="answers">answers:</div>
-            <div class="pluses">pluses:</div>
-            <div class="minuses">minuses:</div>
-            <div class="views">views:</div>
+            <div class="answers">Answers:</div>
+            <div class="pluses">Pluses:</div>
+            <div class="views">Views:</div>
         </div>
         <div class="left-right">
-            <div class="num">{{item.answers}}</div>
-            <div class="num">{{item.pluses}}</div>
-            <div class="num"> {{item.minuses}}</div>
+            <div class="num">{{item.answersAmount}}</div>
+            <div class="num"> {{item.pluses}}</div>
             <div class="num">{{item.views}}</div>
         </div>
     </div>
     <div class="question-right">
-        <h1 class="heading">{{item.heading}}</h1>
+        <a class="heading" [href]="'http://localhost:4200/onequestion/' + item.id + '/1'" >{{item.heading}}</a>
         <div class="question-content">
             {{item.content}}        
         </div>
@@ -32,9 +47,11 @@
             <div class="tag">{{item1.description}}</div>
         </div>
         <div class="user-date">
-            <div class="user">{{item.username}}</div>
+            <a class="user" [href]="'http://localhost:4200/account/' + item.userId">{{item.username}}</a>
             <div class="date">{{item.dateAdded}}</div>
         </div>
     </div>
-</div> -->
-<div class="answers">questionsList$.page</div>
+</div>
+<div class="question-pagination">
+    <div class="question-pag-elem">1</div>
+</div>

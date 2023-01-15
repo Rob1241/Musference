@@ -8,6 +8,15 @@
     grid-auto-rows: 240px;
     grid-auto-columns:120px;
 }
+.account-edit{
+  background-color: rgb(219, 219, 219);
+  border: 1px solid black;
+    border-radius: 25px;
+    width: 100px;
+    text-align: center;
+    position: absolute;
+    right: 130px;
+}
 
 .nick {
     font-size: 30px;

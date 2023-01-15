@@ -9,7 +9,7 @@
         public string Email { get; set; }
 
         public int Reputation { get; set; }
-
+        public DateTime DateAdded { get; set; }
         public string Description { get; set; }
         public string Contact { get; set; }
         

@@ -4,80 +4,70 @@
             <div class="one-logo">
                 <img class="one-logo-logo" src="https://scontent-frt3-1.xx.fbcdn.net/v/t1.6435-9/157503794_296996541789581_4204198144748896044_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EJ4AHuq8y0kAX8dOtGv&tn=T8O0N_-SxAnHIOir&_nc_ht=scontent-frt3-1.xx&oh=00_AT93c-3EUBsJ9RlDr8vBbvYi5nQ1AsecD4w3EKkxsrBbFg&oe=630A69C4">
             </div>
-            <div class="one-alias">David Zguetta</div>
+            <div class="one-alias">
+                <a [href]="'http://localhost:4200/account/' + question.result.question.userId">{{question.result.question.username}}</a>
+            </div>
+            <div class="one-rep">Reputation: {{question.result.question.userReputation}}</div>
         </div>
         <div class="one-content">
             <div class="one-heading">
                 <div class="one-plus-minus">
-                    <div class="one-plus-item">+</div>
-                    <div class="one-plus-item">34</div>
-                    <div class="one-plus-item">-</div>
+                    <div class="one-plus-item"><button (click)="likeQuestion(question.result.question.id)" class="xd bi like bi-heart-fill"></button></div>
+                    <div class="one-plus-item">{{question.result.question.pluses}}</div>
                 </div>
                 <div class="one-heading-right">
-                    <div class="one-title">How to make sth</div>
+                    <div class="one-title">{{question.result.question.heading}}</div>
+                    <button *ngIf="isOwner(question.result.question.userId)" (click)="deleteQuestion(question.result.question.id)" class="onequest-trash bi bi-trash"></button>
                     <div class="one-info">
-                        <div class="added-lasta">2 days ago</div>
-                        <div class="added-lasta">4 minutes ago</div>
-                        <div class="one-views">views: 5321</div>
+                        <div class="added-lasta">Added: {{question.result.question.dateAdded}}</div>
+                        <div class="one-views">Views: {{question.result.question.views}}</div>
                     </div>
                 </div>
             </div>
             <div class="one-quest-content">
-                <div class="one-question-text">xnwgurezmevvbhjnce</div>
-                <div class="one-question-tags">
+                <div class="one-question-text">{{question.result.question.content}}</div>
+                <!-- <div class="one-question-tags">
                     <div class="one-question-tag">tag1</div>
                     <div class="one-question-tag">tag2</div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
-    <div class="one-quest-answer">
+    <div [formGroup]="form"  class="one-quest-form">
+        <div class="one-quest-ya">Your answer</div>
+        <div class="one-quest-cnt">
+        <div class="one-quest-media">
+            <div class="one-quest-one-med"><i class="bi bi-soundwave"></i></div>
+            <div class="one-quest-one-med"><i class="bi bi-card-image"></i></div>
+        </div>
+        <div class="one-quest-answ-cont"><input class="one-quest-input" formControlName="content"></div>
+        </div>
+        <button class="one-quest-submit" (click)="addAnswer()">
+            Add answer
+        </button>
+    </div> 
+    <div class="one-quest-answer" *ngFor="let item of question.result.answers">
         <div class="one-image">
             <div class="one-logo">
                 <img class="one-logo-logo" src="https://scontent-frt3-1.xx.fbcdn.net/v/t1.6435-9/157503794_296996541789581_4204198144748896044_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EJ4AHuq8y0kAX8dOtGv&tn=T8O0N_-SxAnHIOir&_nc_ht=scontent-frt3-1.xx&oh=00_AT93c-3EUBsJ9RlDr8vBbvYi5nQ1AsecD4w3EKkxsrBbFg&oe=630A69C4">
             </div>
-            <div class="one-alias">David Zguetta</div>
+            <div class="one-alias">
+                <a [href]="'http://localhost:4200/account/' + item.userId">{{item.username}}</a>
+            </div>
+            <div class="one-rep">Reputaiton: {{item.userReputation}}</div>
         </div>
         <div class="one-content">
             <div class="one-answer-cont">
                 <div class="one-plus-minus">
-                    <div class="one-plus-item">+</div>
-                    <div class="one-plus-item">34</div>
-                    <div class="one-plus-item">-</div>
+                    <div class="one-plus-item"><button (click)="likeAnswer(item.id)" class="xd bi like bi-heart-fill"></button></div>
+                    <div class="one-plus-item">{{item.pluses}}</div>
                 </div>
                 <div class="one-heading-right">
-                    <div class="one-answer">29 września 1887 rozpoczął się w „Kurierze Codziennym” druk Lalki w formie odcinków[5]. 5 maja 1888, w 123 numerze Kuriera ukazał się fragment I tomu powieści. Nastąpiła miesięczna przerwa w publikacji. Na skutek procesu sądowego Prus postanowił zmienić nazwisko subiekta Moraczewskiego na Mraczewski.
-                            II tomu Lalki na łamach „Kuriera” (od nr. 157). Natomia
+                    <div class="one-answer">{{item.content}}
                     </div>
+                    <button *ngIf="isOwner(item.userId)" (click)="deleteAnswer(item.id)" class="onequest-trash bi bi-trash"></button>
                     <div class="one-info">
-                        <div class="added-lasta">2 days ago</div>
-                        <div class="added-lasta">4 minutes ago</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="one-quest-answer">
-        <div class="one-image">
-            <div class="one-logo">
-                <img class="one-logo-logo" src="https://scontent-frt3-1.xx.fbcdn.net/v/t1.6435-9/157503794_296996541789581_4204198144748896044_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EJ4AHuq8y0kAX8dOtGv&tn=T8O0N_-SxAnHIOir&_nc_ht=scontent-frt3-1.xx&oh=00_AT93c-3EUBsJ9RlDr8vBbvYi5nQ1AsecD4w3EKkxsrBbFg&oe=630A69C4">
-            </div>
-            <div class="one-alias">David Zguetta</div>
-        </div>
-        <div class="one-content">
-            <div class="one-answer-cont">
-                <div class="one-plus-minus">
-                    <div class="one-plus-item">+</div>
-                    <div class="one-plus-item">34</div>
-                    <div class="one-plus-item">-</div>
-                </div>
-                <div class="one-heading-right">
-                    <div class="one-answer">29 września 1887 rozpoczął się w „Kurierze Codziennym” druk Lalki w formie odcinków[5]. 5 maja 1888, w 123 numerze Kuriera ukazał się fragment I tomu powieści. Nastąpiła miesięczna przerwa w publikacji. Na skutek procesu sądowego Prus postanowił zmienić nazwisko subiekta Moraczewskiego na Mraczewski.
-                            II tomu Lalki na łamach „Kuriera” (od nr. 157). Natomia
-                    </div>
-                    <div class="one-info">
-                        <div class="added-lasta">2 days ago</div>
-                        <div class="added-lasta">4 minutes ago</div>
+                        <div class="added-lasta">Added: {{item.dateAdded}}</div>
                     </div>
                 </div>
             </div>

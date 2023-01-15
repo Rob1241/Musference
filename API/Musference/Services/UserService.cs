@@ -85,6 +85,7 @@ namespace Musference.Services
                 Login = dto.Login,
                 Name = dto.Name,
                 DateAdded = DateTime.Now,
+                RoleId = 1
                 //Salt = newSalt
             };
             var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
@@ -260,7 +261,7 @@ namespace Musference.Services
         {
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.UsersDbSet.Count() / pageResults);
-            var sortedusers = await _context.UsersDbSet.OrderBy(u => u.Reputation).ToListAsync();
+            var sortedusers = await _context.UsersDbSet.OrderByDescending(u => u.Reputation).ToListAsync();
             var response = _pagination.UserPagination(sortedusers, pageResults,page, pageCount);
             return response;
         }

@@ -88,14 +88,14 @@ namespace Musference.Controllers
             _service.PlusAnswer(id, GetUserId());
             return Ok();
         }
-        [HttpDelete("{id}/Delete)")]
+        [HttpDelete("{id}/Delete")]
         [Authorize]
         public ActionResult DeleteQuestion([FromRoute] int id)
         {
             _service.DeleteQuestion(id, GetUserId());
             return Ok();
         }
-        [HttpDelete("Answer/{id}/Delete)")]
+        [HttpDelete("Answer/{id}/Delete")]
         [Authorize]
         public ActionResult DeleteAnswer([FromRoute] int id)
         {

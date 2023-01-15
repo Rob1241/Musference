@@ -1,68 +1,176 @@
 .tracks-parent{
+    margin-left: 40px;
     width: 800px;
+    position: relative;
 }
-.tracks{
-    display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 5px;
-    grid-auto-rows: 125px;
-    grid-auto-columns: 80px;
-    padding: 10px;
+.head-tracks{
+    background-color: rgb(229, 243, 255);
+    position: relative;
+    height: 110px;
+    border-bottom: 1px solid black;
+}
+.alltracks{
+    padding: 5px;
+}
+.track-cont{
+    margin-top: 20px;
+    background-color: aliceblue;
     
 }
-.track{
-    border-radius: 0px;
-    display: flex;
+.track-oper{
+    position: absolute;
+    bottom: 0px;
+    padding: 5px;
+}
+.track-bar{
+    display:flex;
     flex-direction: row;
-    align-items: center;
-    height: 100px;
-    width: 100%;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
 }
-.track-container
-{
-    width: 280px;
+.track-search{
     border: 1px solid black;
+    height: 30px;
 }
-.tracks-img {
-    height: 100px;
-    width: 100px;
-    object-fit: contain;
-}   
-
-.tracks-imgg {
-    height: 100%; 
-    width: 100%; 
+.track-newest{
+    border: 1px solid black;
+    margin-left: 10px;
+}
+.track-mostliked{
+    border: 1px solid black;
+    margin-left: 10px;
+}
+.addtrack{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 120px;
+}
+.tracks-imagge {
+    height: 225px;
+    width: 225px;
     object-fit: cover;
     padding: 0px;
-    border-radius: 0px;
+    border-radius: 2px;
 }
-.tracks-artist {
+.track-right{
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    padding-bottom: 40px;
+    height: 225px;
+}
+.track-right-up{
+    /* height: 100%;  */
+    position:relative;
+    width: 540px;
+    display: flex;
+    flex-direction: column;
+}
+.track-trash{
+    position: absolute;
+    right: 5px;
+    top: 5px;
     font-size: 20px;
 }
-.tracks-title {
-    font-size: 18px;
+.track-taglike{
+    height: 100%;
+    position: absolute;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
-.tracks-date {
-    font-size: 14px;
+.track-likees{
+    position: absolute;
+    right: 40px;
+    bottom: 40px; 
+    text-align: end;
 }
-.track-len {
+.tracks-likes{
+    font-size: 25px;
+    width: 50px;
     display: flex;
     flex-direction: row;
-    height: 25px;
 }
-.track-tags {
+.track-artistinfo{
+    position: relative;
+    left: 0;
+}
+.track-artistname{
+    font-size: 30px;
+}
+.track-name{
+    font-size: 50px;
+}
+.track-tagss{
     display: flex;
     flex-direction: row;
+    height:28px
 }
-.track-tag{
+.track-onetag{
     border: 1px solid black;
     border-radius: 10px;
     background-color: rgb(221, 221, 221);
-    margin-right:10px;
+    margin-left:10px;
 }
-.tracks-date{
-    text-align: end;
+.track-cont{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid black;
+    padding: 5px;
 }
-.tracks-info{
-    width: 180px;
+.track-right-down{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    width: 575px;
+}
+.track-playandtime{
+    display: flex;
+    flex-direction: row;
+}
+.tracks{
+    display: flex;
+    flex-direction: column;
+    width:800px;
+    gap:10px
+}
+.track-play{
+    position: relative;
+    
+    
+}
+.track-date {
+    position: relative;
+    top: 8px;
+}
+.track-time{
+    position: relative;
+    bottom: -21px;
+    height: 0px;
+    font-size: 20px;
+}
+.play{
+    font-size: 60px;
+    height: 80px;
+    position: relative;
+    top:20px;
+}
+.like{
+    font-size: 35px;
+    position: relative;
+    top: 25px;
+    margin-right: 15px;
+}
+.tl{
+    border: 1px solid black;
+    background-color: rgb(255, 255, 255);
+    margin-left:10px;
+}
+.tr-lk{
+    position: relative;
+    top: 35px;
 }

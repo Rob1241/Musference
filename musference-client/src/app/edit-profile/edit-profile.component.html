@@ -1,0 +1,25 @@
+<form [formGroup]="form" class="edit-profile">
+    <div>Name</div>
+    <input  class="edit-property" formControlName="name">
+    <div>Description</div>
+    <input class="edit-property" formControlName="description">
+    <div>City</div>
+    <input class="edit-property" formControlName="city">
+    <div>Country</div>
+    <input class="edit-property" formControlName="country">
+    <div>Contact</div>
+    <input class="edit-property" formControlName="contact">
+    <div>Email</div>
+    <input class="edit-property" formControlName="email">
+    <button class="edit-button" 
+    (click)="saveChanges()">Save Changes</button>
+    <div>ChangePassword</div>
+    <input class="edit-property old-password" formControlName="oldpassword" type="password" placeholder="Type old password" >
+    <input class="edit-property new-password" formControlName="newpassword" type="password" placeholder="Type new password" >
+    <button class="change-password" 
+    (click)="changePassword()">Change Password</button>
+    <div>Delete account</div>
+    <input class="edit-property" formControlName="deletepassword" type="password" placeholder="Type password">
+    <button class="delete-button" 
+    (click)="deleteAccount()">Delete account</button>
+</form>

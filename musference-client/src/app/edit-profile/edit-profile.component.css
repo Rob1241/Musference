@@ -1,0 +1,17 @@
+.edit-profile{
+    display:flex;
+    flex-direction: column;
+}
+.edit-property{
+    width: 240px;
+}
+.edit-button{
+    width: 120px;
+    border-radius: 15px;
+}
+.delete-button{
+    width: 140px;
+}
+.change-password{
+    width: 140px;
+}

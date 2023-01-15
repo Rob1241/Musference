@@ -10,7 +10,7 @@
 .one-quest-answer{
     display: flex;
     flex-direction: row;
-    padding-top: 0px;
+    padding-top: 35px;
 }
 .one-plus-minus {
     width: 25px;
@@ -64,7 +64,14 @@
 }
 .one-heading-right{
     width: 100%;
+    margin-left: 10px;
     position: relative;
+}
+.onequest-trash{
+    position:absolute;
+    right: 5px;
+    font-size: 20px;
+    top:5px
 }
 .one-info{
     position: absolute;
@@ -77,4 +84,36 @@
 }
 .added-lasta{
     margin-right: 5px;
+}
+.one-quest-form{
+    width: 590px;
+    margin-left: 110px;
+}
+.one-quest-ya{
+    font-size: 25px;
+    padding-left: 10px;
+}
+.one-quest-media{
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(221, 221, 221);
+}
+.one-quest-one-med{
+    margin-left: 15px;
+}
+.one-quest-input{
+    height: 100px;
+    width: 588px;
+    padding-left: 10px;
+    border: 0px;
+    border-top: 1px solid black;
+}
+.one-quest-cnt{
+    border: 1px solid black;
+}
+.one-quest-submit{
+    position: absolute;
+    right: 210px;
+    margin-top: 4px;
+    border: 1px solid black;;
 }

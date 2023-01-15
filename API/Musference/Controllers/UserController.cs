@@ -171,12 +171,6 @@ namespace Musference.Controllers
         //    _service.UnFollow(id, GetUserId());
         //    return Ok();
         //}
-        [HttpDelete("Logout")]
-        public ActionResult Logout()
-        {
-            
-            return Ok();
-        }
         protected int GetUserId()
         {
             int id = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));

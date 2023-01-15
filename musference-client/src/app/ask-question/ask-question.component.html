@@ -1,8 +1,8 @@
-<div class="ask-question">
+<form [formGroup]="form" class="ask-question">
     <div class="askq-content">
         <div class="ask-title ask-element">Ask new question</div>
-        <div class="ask-text ask-element">title</div>
-        <div class="title-input ask-element"></div>
+        <input class="title-input ask-element" formControlName="heading">
+        <!-- <div class="title-input ask-element"></div> -->
         <div class="ask-text ask-element">content</div>
         <div class="ask-content">
             <div class="ask-icons">
@@ -11,7 +11,7 @@
                 <div class="ask-icon"><i class="bi bi-soundwave"></i></div>
                 <div class="ask-icon"><i class="bi bi-card-image"></i></div>
             </div>
-            <div class="ask-input"></div>
+            <input class="ask-input" formControlName="content">
         </div>
         <div class="ask-text ask-element">tags</div>
         <div class="ask-tags ask-element">
@@ -21,7 +21,7 @@
         </div>
         <div class="ask-options ask-element">
             <div class="ask-option">discard</div>
-            <div class="ask-option">ask</div>
+            <button class="ask-option" (click)="addQuestion()">ask</button>
         </div>
     </div>
-</div>
+</form>

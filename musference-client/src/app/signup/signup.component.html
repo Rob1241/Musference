@@ -1,4 +1,4 @@
-<div class="signup">
+<!-- <div class="signup">
     <div class="sign-cont-google signup-cont">
         <div class="signup-text">Continue with google</div>
     </div>
@@ -20,4 +20,29 @@
         </div>
     </form>
     <div class="sign-forgot-password">forgot password?</div>
-</div>
+</div> -->
+<form [formGroup]="form">
+    <fieldset>
+        <div class="form-field">
+            <label>Login:</label>
+            <input name="login" formControlName="login">
+        </div>
+        <div class="form-field">
+            <label>Name:</label>
+            <input name="name" formControlName="name">
+        </div>
+        <div class="form-field">
+            <label>Email:</label>
+            <input name="email" formControlName="email" >
+        </div>
+        <div class="form-field">
+            <label>Password:</label>
+            <input name="password" formControlName="password" 
+                   type="password">
+        </div>
+    </fieldset>
+    <div class="form-buttons">
+        <button class="button button-primary" 
+                (click)="signup()">Signup</button>
+    </div>
+</form>

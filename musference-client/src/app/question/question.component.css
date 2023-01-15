@@ -3,15 +3,31 @@
     flex-direction: row;
     border-top: solid 1px;
     padding: 10px;
+    margin-left: 20px;
+    width: 800px;
 }
-.user-date {
+.question-bar{
     display:flex;
     flex-direction: row;
-    float: right;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
 }
-.user{
-    margin-right: 15px;
+.askquest:hover{
+    cursor:pointer;
 }
+.question-pagination{
+    display:flex;
+    flex-direction: row;
+}
+.question-pag-elem{
+    border-radius: 5x;
+    border: solid 1px;
+    background-color: rgb(196, 196, 196);
+    width: 25px;
+    text-align: center;
+}
+
 .question-content{
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -26,14 +42,36 @@
     width: 120px;
 }
 .question-right{
-    width: 500px;
+    width: 650px;
     font-size: 12px;
+    position:relative;
+    padding-left: 10px;
+}
+.quest-trash{
+    position: absolute;
+    right: 5px;
+    top: 5px
+}
+.bi-trash{
+    font-size: 15px;
 }
 .left-right {
     position: absolute;
     display: flex;
     flex-direction: column;
     right: 0px;
+
+}
+.user-date {
+    display:flex;
+    flex-direction: row;
+    float: right;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+.user{
+    margin-right: 15px;
 }
 .heading
 {
@@ -56,19 +94,41 @@
 .head-question {
     display:flex;
     flex-direction: row;
-    width: 100%;
+    width: 800px;
+    margin-left: 20px;
+    height:100px;
+    position:relative;
+    background-color: rgb(255, 255, 255);
 }
 .askquest {
     position: absolute;
-    right: 0px;
+    right: 5px;
     background-color: rgb(221, 221, 221);
     border: solid 1px;
     border-radius: 8px;
     height: 40px;
     vertical-align: text-bottom;
     padding:5px;
-    top:10px;
+    top:5px;
 }
 .question-oper{
-    margin-bottom: 10px;
+    position: absolute;
+    bottom: 5px;
+    left:5px
+}
+.question-search{
+    border: 1px solid black;
+    height: 30px;
+}
+.question-newest{
+    border: 1px solid black;
+    margin-left: 10px;
+}
+.question-mostliked{
+    border: 1px solid black;
+    margin-left: 10px;
+}
+.question-bestusers{
+    border: 1px solid black;
+    margin-left: 10px;
 }

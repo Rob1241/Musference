@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserApiService } from '../api-services/user-api.service';
+import { ActivatedRoute } from '@angular/router';
+import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-users',
@@ -8,12 +10,20 @@ import { UserApiService } from '../api-services/user-api.service';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-  userList$!:Observable<any[]>;
-
-  constructor(private service:UserApiService) { }
+  form:FormGroup;
+  page:any;
+  users:any;
+  constructor(private service:UserApiService,private activatedRoute:ActivatedRoute,private fb:FormBuilder ) { 
+    this.form = this.fb.group({
+      search: ['',Validators.required]
+    })
+  }
 
   ngOnInit(): void {
-    this.userList$ = this.service.getAllUsers();
+    this.page = this.activatedRoute.snapshot.paramMap.get('page')
+    this.service.getAllUsersNewest(this.page).subscribe(data=>{
+      this.users=data;
+    });
   }
 
 }

@@ -30,10 +30,10 @@ namespace Musference.Controllers
             var response = _service.GetAllTrackNewest(page);
             return Ok(response);
         }
-        [HttpGet("best_users/{page}")]
-        public ActionResult<IEnumerable<GetTrackDto>> GetAllTrackBestUsers([FromRoute] int page)
+        [HttpGet("most_liked/{page}")]
+        public ActionResult<IEnumerable<GetTrackDto>> GetAllTrackMostLiked([FromRoute] int page)
         {
-            var response = _service.GetAllTrackBestUsers(page);
+            var response = _service.GetAllTrackMostLiked(page);
             return Ok(response);
         }
         [HttpPost]

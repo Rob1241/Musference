@@ -6,6 +6,7 @@
     grid-auto-rows: 100px;
     grid-auto-columns: 400px;
     padding: 10px;
+    margin: 10px;
     
 }
 .user{
@@ -36,4 +37,39 @@
 }
 .users-nick {
     font-size: 20px;
+}
+.head-users{
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    height: 110px;
+    width: 860px;
+    border-bottom: 1px solid black;
+    margin-left:20px;
+}
+.allusers{
+    padding: 5px;
+}
+.users-oper{
+    position: absolute;
+    bottom: 0px;
+    padding: 5px;
+}
+.users-bar{
+    display:flex;
+    flex-direction: row;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+.users-search{
+    border: 1px solid black;
+    height: 30px;
+}
+.users-newest{
+    border: 1px solid black;
+    margin-left: 10px;
+}
+.users-mostliked{
+    border: 1px solid black;
+    margin-left: 10px;
 }

@@ -15,7 +15,7 @@ namespace Musference.Services
     {
         public Task<TrackResponse> SearchTrack(string text, int page);
         public Task<TrackResponse> GetAllTrackNewest(int page);
-        public Task<TrackResponse> GetAllTrackBestUsers(int page);
+        public Task<TrackResponse> GetAllTrackMostLiked(int page);
         public Task<int> AddTrack(int id, AddTrackDto dto);
         public void DeleteTrack(int id, int userId);
         public void LikeTrack(int id, int userId);
@@ -53,11 +53,11 @@ namespace Musference.Services
             var response = _pagination.TrackPagination(sortedtrack, pageResults, page, pageCount);
             return response;
         }
-        public async Task<TrackResponse> GetAllTrackBestUsers(int page)
+        public async Task<TrackResponse> GetAllTrackMostLiked(int page)
         {
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.TracksDbSet.Count() / pageResults);
-            var sortedtrack = await _context.TracksDbSet.OrderBy(t => t.User.Reputation).ToListAsync();
+            var sortedtrack = await _context.TracksDbSet.OrderByDescending(t => t.Likes).ToListAsync();
             var response = _pagination.TrackPagination(sortedtrack, pageResults, page, pageCount);
             return response;
         }

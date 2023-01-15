@@ -1,62 +1,25 @@
+<div class="head-users">
+    <h1 class="allusers">All users</h1>
+    <div class="users-bar">
+        <form [formGroup]="form">
+            <button class="users-search">Search</button>
+            <input class="users-search-inp" formControlName="search">
+        </form>
+        <button class="users-newest">Newest</button>
+        <button class="users-mostliked">Reputation</button>
+    </div>
+</div>
 <div class="users">
-    <div class="user" *ngFor="let item of userList$|async">
+    <div class="user" *ngFor="let item of users.result.users">
         <div class="users-img">
             <img class="imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
         </div>
         <div class="users-info">
             <div class="users-rep">{{item.reputation}}</div>
-            <div class="users-nick">{{item.name}}</div>
+            <div class="users-nick">
+                <a [href]="'http://localhost:4200/account/' + item.id">{{item.name}}</a>
+            </div>
             <div class="users-country">{{item.city}} , {{item.country}}</div>
         </div>
     </div>
-    <!-- <div class="user">
-        <div class="users-img">
-            <img class="imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-        </div>
-        <div class="users-info">
-            <div class="users-rep">272</div>
-            <div class="users-nick">Robert</div>
-            <div class="users-country">Siedlce, Poland</div>
-        </div>
-    </div>
-    <div class="user">
-        <div class="users-img">
-            <img class="imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-        </div>
-        <div class="users-info">
-            <div class="users-rep">272</div>
-            <div class="users-nick">Robert</div>
-            <div class="users-country">Siedlce, Poland</div>
-        </div>
-    </div>
-    <div class="user">
-        <div class="users-img">
-            <img class="imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-        </div>
-        <div class="users-info">
-            <div class="users-rep">272</div>
-            <div class="users-nick">Robert</div>
-            <div class="users-country">Siedlce, Poland</div>
-        </div>
-    </div>
-    <div class="user">
-        <div class="users-img">
-            <img class="imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-        </div>
-        <div class="users-info">
-            <div class="users-rep">272</div>
-            <div class="users-nick">Robert</div>
-            <div class="users-country">Siedlce, Poland</div>
-        </div>
-    </div>
-    <div class="user">
-        <div class="users-img">
-            <img class="imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-        </div>
-        <div class="users-info">
-            <div class="users-rep">272</div>
-            <div class="users-nick">Robert</div>
-            <div class="users-country">Siedlce, Poland</div>
-        </div>
-    </div> -->
 </div>

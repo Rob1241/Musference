@@ -14,3 +14,6 @@
     display: block;
     background-image: linear-gradient(rgb(223, 223, 223), rgb(199, 196, 196));
 }
+.logout:hover {
+    cursor:pointer;
+}

@@ -13,7 +13,6 @@ namespace Musference.Models.Entities
         public List<Tag> Tags { get; set; }
         public List<User> UsersThatLiked { get; set; }
         public DateTime DateAdded { get; set; }
-        public int TimesListened { get; set; }
         public int Length { get; set; }
         public int Likes { get; set; }
         //[NotMapped]

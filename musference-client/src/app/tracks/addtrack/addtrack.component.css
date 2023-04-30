@@ -1,0 +1,84 @@
+.addt{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    padding: 30px;
+}
+.addt-div{
+    padding: 30px;
+    width: 450px;
+    height: 600px;
+    background-color:rgb(255, 255, 255);
+    position:relative;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px 5px rgb(158, 158, 158);
+}
+.addt-text{
+    font-size: 30px;
+    text-align: center;
+}
+.add-button{
+    position: absolute;
+    right: 150px;
+    width: 140px;
+    margin-top: 50px;
+    border-radius: 15px;
+    bottom: 10px;
+    background: rgb(64,64,189);
+    color: white;
+    border: 0px;
+    background: linear-gradient(90deg, rgba(64,64,189,1) 42%, rgba(0,212,255,1) 100%);
+}
+.add-button:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.add-button:active{
+    background-color: rgb(38, 0, 255);
+}
+.addt-label{
+    position: absolute;
+    left: 30px;
+    font-size: 14px;
+}
+.field{
+    margin-bottom: 40px;
+}
+.addt-input{
+    position: absolute;
+    right:32px;
+    border-radius: 2px;
+    border: 1px solid black;
+}
+.dragdrop{
+    position: relative;
+    width: 188px;
+    left:200px;
+    height: 180px;
+}
+.dragdropAudio{
+    position: relative;
+    width: 188px;
+    left:200px;
+    height: 180px;
+}
+.imgbutton{
+    position: relative;
+    left:350px;
+    bottom:35px;
+    border-radius: 20px;
+}
+.audiobutton{
+    position: relative;
+    left:350px;
+    bottom:35px;
+    border-radius: 20px;
+}
+.but:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.but:active{
+    background-color: rgb(38, 0, 255);
+}

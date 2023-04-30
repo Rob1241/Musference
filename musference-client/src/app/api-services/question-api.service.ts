@@ -23,9 +23,6 @@ export class QuestionApiService {
   getAllQuestionsMostLiked(page:number):Observable<any> {  
     return this.http.get<any>(this.questionAPIUrl+`/Question/most-liked/${page}`);
   }
-  getAllQuestionsBestUsers(page:number):Observable<any> {  
-    return this.http.get<any>(this.questionAPIUrl+`/Question/best-users/${page}`);
-  }
   searchQuestion(page:Number,text:Text):Observable<any>{
     return this.http.get<any>(this.questionAPIUrl+`/Question/Search/${page}/${text}`);
   }

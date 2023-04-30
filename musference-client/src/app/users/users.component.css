@@ -1,16 +1,15 @@
 .users{
-    width:880px;
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    gap: 5px;
-    grid-auto-rows: 100px;
-    grid-auto-columns: 400px;
     padding: 10px;
-    margin: 10px;
-    
+    width:800px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10px;
+    grid-auto-rows: 100px;
+    grid-auto-columns: 600px;
+    padding-top: 10px;
 }
 .user{
-    border: 1px solid black;
+    box-shadow: 0px 0px 2px 1px rgb(158, 158, 158);
     border-radius: 25px;
     display: flex;
     flex-direction: row;
@@ -23,11 +22,13 @@
 }   
 
 .imgg {
-    height: 100%; 
-    width: 100%; 
+    height: 80%; 
+    width: 80%; 
     object-fit: cover;
-    padding: 10px;
+    padding: 0px;
+    margin:10px;
     border-radius: 50%;
+    border:1px solid rgb(105, 105, 105);
 }
 .users-rep {
     font-size: 14px;
@@ -37,17 +38,21 @@
 }
 .users-nick {
     font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 150px;
 }
 .head-users{
-    background-color: rgb(255, 255, 255);
     position: relative;
-    height: 110px;
-    width: 860px;
+    height: 85px;
+    width: 799px;
     border-bottom: 1px solid black;
-    margin-left:20px;
 }
 .allusers{
-    padding: 5px;
+    position: absolute;
+    bottom: 3px;
+    left:10px;
+    font-size: 27px;
 }
 .users-oper{
     position: absolute;
@@ -72,4 +77,59 @@
 .users-mostliked{
     border: 1px solid black;
     margin-left: 10px;
+}
+.button{
+    border: 0px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    background-color: rgba(64,64,189,1);
+    color: white;
+}
+.button:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.button:active{
+    background-color: rgb(38, 0, 255);
+}
+.users-mostliked{
+    border-radius: 15px;
+}
+.question-pagination{
+    position: absolute;
+    margin-top: 10px;
+    left:0px;
+    display:flex;
+    flex-direction: row;
+}
+.question-pag-elem{
+    border-radius: 5x;
+    border: solid 1px;
+    background-color: rgba(64,64,189,1);
+    width: 25px;
+    border-radius: 5px;
+    margin-right: 0px;
+    text-align: center;
+    color: white;
+}
+.quest-next{
+    width: 50px;
+}
+.quest-prev{
+    width: 50px;
+}
+.pag-elements{
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: center;
+}
+.pag-inside{
+    position: relative;
+    width: 100px;
+    right:20px;
+    background-color: rgb(255, 87, 241);
+}
+.emptybutton{
+    width: 50px;
+    opacity: 0;
 }

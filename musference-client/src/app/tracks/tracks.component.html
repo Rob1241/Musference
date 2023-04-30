@@ -1,58 +1,70 @@
 
 <div class="tracks-parent">
     <div class="head-tracks">
-        <h1 class="alltracks">All tracks</h1>
-        <button class="addtrack" routerLink="/addtrack">Add track</button>
+        <h1 class="alltracks">Utwory</h1>
+        <button class="button addtrack" routerLink="/addtrack">Dodaj utwór</button>
         <div class="track-bar">
             <form [formGroup]="form">
-                <button class="track-search">Search</button>
+                <button class="track-search button" (click)="searchTracks()">Szukaj</button>
                 <input class="track-search-inp" formControlName="search">
             </form>
-            <button class="track-newest">Newest</button>
-            <button class="track-mostliked">MostLiked</button>
+            <button class="track-mostliked button" (click)="mostLiked()">Polubienia</button>
         </div>
     </div>
     
     <div class="tracks">
         <div class="track-cont" *ngFor="let item of tracks.result.tracks">
             <div class="track-image">
-                <img class="tracks-imagge" src="https://img.myloview.pl/fototapety/neon-music-note-on-the-dark-background-music-time-vector-eps-10-illustration-700-271304297.jpg">
+                <img class="tracks-imagge" src={{item.logoFile}}>
             </div>
             <div class="track-right">
-                <div class="track-right-up">
                     <div class="track-artistinfo">
                         <div class="track-artistname">
-                            <a [href]="'http://localhost:4200/account/' + item.userId">{{item.artist}}</a>
+                            <a  class="clasa" [href]="'http://localhost:4200/account/' + item.userId">{{item.artist}}</a>
                         </div>
                         <div class="track-name">{{item.title}}</div>
                     </div>
-                    <button *ngIf="isOwner(item.userId)" (click)="deleteTrack(item.id)" class="track-trash bi bi-trash"></button>  
-                    <!-- <div class="track-taglike">
-                        <div class="track-tagss">
-                            <div class="track-onetag">tag1</div>
-                            <div class="track-onetag">tag2</div>
-                            <div class="track-onetag">tag3</div>
-                        </div>
-                        <div class="track-date">Date: {{item.dateAdded}}</div>
-                    </div> -->
-                </div>
-                <div class="track-right-down">
-                    <div class="track-playandtime">
-                        <div class="track-play"><button  class="bi play bi-play-fill"></button></div>
-                        <div class="track-time">
-                            <div class="tl track-onelength">0:00</div>
-                            <div class="tl track-length">2:38</div>
+                    <div class="track-added">Dodano: {{item.dateAdded | date:'M/d/yy, h:mm a'}}</div>
+                    <div class="sound">
+                    <button id="audio" (click)="playSound(item.audioFile)"class="playbutton">
+                        <div class="bi play bi-play-fill"></div>
+                    </button>
+                    <button id="audio"(click)="pauseSound()"  class="playbutton pause">
+                        <div class="bi bi-pause-fill"></div>
+                    </button>
+                    <button (click)="stopSound()"  class="playbutton stop">
+                        <div class="bi play bi-stop-fill"></div>
+                    </button>
                     </div>
-                      
-                    <div class="track-likees">
-                        <div class="tracks-likes">
-                            <div><button (click)="likeTrack(item.id)" class="xd bi like bi-heart-fill"></button></div>
-                            <div class="tr-lk">{{item.likes}}</div>
-                        </div>
+                    <div class="tracks-likes">
+                        <button class="likebutton" (click)="likeTrack(item.id)" >
+                            <div class="xd bi like bi-heart-fill"></div>
+                        </button>
+                        <div class="tr-lk">{{item.likes}}</div>
                     </div>
-                </div>
+                    <button class="trashbutton" *ngIf="isOwner(item.userId)" (click)="deleteTrack(item.id)">
+                        <div class="track-trash bi bi-trash"></div>
+                    </button>
+            </div>
+        
+    </div>
+    <div *ngIf="ifNewest()" class="pag-elements" >
+        <div class="pag-inside">
+        <div *ngIf="pagValue()==0" class="question-pagination">
+            <div  class="emptybutton">...</div>
+            <button class="question-pag-elem">1</button>
+            <button class="question-pag-elem quest-next" (click)="next()">nast</button>
+            </div>
+        <div *ngIf="pagValue()==1" class="question-pagination">
+            <button  class="question-pag-elem quest-prev"(click)="previous()">popr</button>
+            <div class="question-pag-elem">{{tracks.result.currentPage}}</div>
+            <button class="question-pag-elem quest-next" (click)="next()">nast</button>
+            </div>
+        <div *ngIf="pagValue()==2" class="question-pagination">
+            <button class="question-pag-elem quest-prev" (click)="previous()">popr</button>
+            <div class="question-pag-elem">{{tracks.result.pages}}</div>
+            <div  class="emptybutton">...</div>
             </div>
         </div>
-        
     </div>
 </div>

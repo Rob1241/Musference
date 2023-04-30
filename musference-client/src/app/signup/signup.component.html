@@ -1,48 +1,31 @@
-<!-- <div class="signup">
-    <div class="sign-cont-google signup-cont">
-        <div class="signup-text">Continue with google</div>
-    </div>
-    <div class="sign-cont-apple signup-cont">
-        <div class="signup-text">Continue with apple</div>
-    </div>
-    <div class="sign-or signup-cont">
-        <div class="signup-text">or</div>
-    </div>
-    <form class="sign-forms">
-        <div class="sign-email signup-cont">
-            <input class="sign-input" placeholder="email">
+<form [formGroup]="form" class="signup">
+    <fieldset class="signup-div">
+        <legend class="signup-text">REJESTRACJA</legend>
+        <div class="form-field signup-field">
+            <label class="signuplabel">Login</label>
+            <input class="signup-input"  placeholder="Wpisz login" name="login" formControlName="login">
         </div>
-        <div class="sign-pwd signup-cont">
-            <input class="sign-input" placeholder="password">
+        <div class="form-field signup-field">
+            <label  class="signuplabel">Imię</label>
+            <input  class="signup-input"  placeholder="Wpisz imię"name="name" formControlName="name">
         </div>
-        <div class="sign-continue signup-cont">
-            <div class="signup-text">Continue</div>
+        <div class="form-field signup-field">
+            <label class="signuplabel">Email</label>
+            <input class="signup-input"  placeholder="Wpisz email" name="email" formControlName="email" >
         </div>
-    </form>
-    <div class="sign-forgot-password">forgot password?</div>
-</div> -->
-<form [formGroup]="form">
-    <fieldset>
-        <div class="form-field">
-            <label>Login:</label>
-            <input name="login" formControlName="login">
-        </div>
-        <div class="form-field">
-            <label>Name:</label>
-            <input name="name" formControlName="name">
-        </div>
-        <div class="form-field">
-            <label>Email:</label>
-            <input name="email" formControlName="email" >
-        </div>
-        <div class="form-field">
-            <label>Password:</label>
-            <input name="password" formControlName="password" 
+        <div class="form-field signup-field">
+            <label class="signuplabel">Hasło</label>
+            <input class="signup-input"  placeholder="Wpisz hasło" name="password" formControlName="password" 
                    type="password">
         </div>
+        <div class="form-field signup-field">
+            <label class="signuplabel">Potwierdzenie hasła</label>
+            <input  class="signup-input"  placeholder="Potwierdź hasło"name="password" formControlName="confirmpassword" 
+                   type="password">
+        </div>
+        <div class="form-buttons field ">
+            <button class="signup-button button button-primary" 
+                    (click)="signup()">Zarejestruj</button>
+        </div>
     </fieldset>
-    <div class="form-buttons">
-        <button class="button button-primary" 
-                (click)="signup()">Signup</button>
-    </div>
 </form>

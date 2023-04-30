@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
-import { QuestionApiService } from '../api-services/question-api.service';
 import { UserApiService } from '../api-services/user-api.service';
 import { SignupModel } from '../models/signup-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -12,12 +12,13 @@ import { SignupModel } from '../models/signup-model';
 export class SignupComponent implements OnInit {
 
   form:FormGroup
-  constructor(private fb:FormBuilder, private service:UserApiService) {
+  constructor(private fb:FormBuilder, private service:UserApiService,private router:Router) {
     this.form = this.fb.group({
       login: ['',Validators.required],
       name: ['',Validators.required],
       email: ['',Validators.required],
-      password: ['',Validators.required]
+      password: ['',Validators.required],
+      confirmpassword: ['',Validators.required]
     })
    }
 
@@ -29,14 +30,14 @@ export class SignupComponent implements OnInit {
     model.name = val.name;
     model.email = val.email;
     model.password = val.password;
+    model.confirmPassword = val.confirmpassword;
     if(val.login&&val.name&&val.email&&val.password){
       this.service.Signup(model).subscribe(()=>{
-        console.log("User signed up")
+        this.router.navigateByUrl('/');
       });
     }
   }
   ngOnInit(): void {
-
   }
 
 }

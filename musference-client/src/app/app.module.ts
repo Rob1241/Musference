@@ -15,6 +15,8 @@ import {MatCardModule} from '@angular/material/card';
 import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { AddtrackComponent } from './tracks/addtrack/addtrack.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { AddtrackComponent } from './tracks/addtrack/addtrack.component';
     TracksComponent,
     LoginComponent,
     EditProfileComponent,
-    AddtrackComponent
+    AddtrackComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import { AddtrackComponent } from './tracks/addtrack/addtrack.component';
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatCardModule
+    MatCardModule,
+    NgxDropzoneModule
   ],
   providers: [{provide:HTTP_INTERCEPTORS,useClass: AuthorizationInterceptor,multi:true},
   QuestionApiService],

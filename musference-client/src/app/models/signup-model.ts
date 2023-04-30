@@ -3,4 +3,5 @@ export class SignupModel {
     name="";
     email="";
     password ="";
+    confirmPassword ="";
 }

@@ -3,10 +3,10 @@ using Musference.Services;
 using Musference.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Musference.Exceptions;
 using Musference.Models;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Musference.Models.EndpointModels.User;
+using Musference.Exceptions;
 
 namespace Musference.Controllers
 {
@@ -26,30 +26,6 @@ namespace Musference.Controllers
             var token = _service.GenerateJwtToken(dto);
             return Ok(token);
         }
-        //[HttpGet]
-        //public ActionResult<IEnumerable<GetUserDto>> GetAllUsers()
-        //{
-        //    var users = _service.GetAllUsers();
-        //    return Ok(users);
-        //}
-        //[HttpGet("{page}")]
-        //public ActionResult<IEnumerable<GetUserDto>> GetAllUsers([FromRoute] int page)
-        //{
-        //    var response = _service.GetAllUsers(page);
-        //    return Ok(response);
-        //}
-        //[HttpPost("SendResetCode")]
-        //public ActionResult SendResetCode([FromBody]PasswordResetEmail mail)
-        //{
-        //    _service.SendResetCode(mail);
-        //    return Ok();
-        //}
-        //[HttpPost("ResetPassword")]
-        //public ActionResult ResetPassword([FromBody]ResetPasswordModel model)
-        //{
-        //    _service.ResetPassword(model);
-        //    return Ok();
-        //}
         [HttpGet("newest/{page}")]
         public ActionResult<IEnumerable<GetUserDto>> GetAllUsersNewest([FromRoute] int page)
         {
@@ -62,13 +38,6 @@ namespace Musference.Controllers
             var response = _service.GetAllUsersReputation(page);
             return Ok(response);
         }
-        //[Authorize(Roles="Admin")]
-        //[HttpGet("reported_users/{page}")]
-        //public ActionResult<IEnumerable<ReportedUser>> GetReportedUsers([FromRoute] int page)
-        //{
-        //    var response = _service.GetReportedUsers(page);
-        //    return Ok(response);
-        //}
 
         [HttpGet("search/{page}/{text}")]
         public ActionResult<IEnumerable<GetUserDto>> SearchUsers([FromRoute] string text,[FromRoute] int page)
@@ -82,18 +51,15 @@ namespace Musference.Controllers
             var user = _service.GetUser(id);
             return Ok(user);
         }
-        //[HttpPost("{userid}/report")]
-        //public ActionResult ReportUser([FromRoute] int userid, [FromBody] ReportModel model)
-        //{
-        //    var id = _service.ReportUser(userid,GetUserId(),model);
-        //    return Created($"/api/ReportedUsers/{id}", null);
-        //}
         [HttpPost("Signup")]
+
         public ActionResult Signup([FromBody] SignupModel dto)
         {
             _service.Signup(dto);
+
             return Ok();
         }
+
         [HttpPut("ChangePassword")]
         [Authorize]
         public ActionResult ChangePassword([FromBody] ChangePassword password)
@@ -122,13 +88,6 @@ namespace Musference.Controllers
             _service.ChangeCity(city, GetUserId());
             return Ok();
         }
-        //[HttpPut("DeleteUserAdmin")]
-        //[Authorize(Roles="Admin")]
-        //public ActionResult DeleteUserAdmin([FromBody] DeleteUserAdmin model)
-        //{
-        //    _service.DeleteUserAdmin(model);
-        //    return Ok();
-        //}
         [HttpPut("ChangeCountry")]
         [Authorize]
         public ActionResult ChangeCountry([FromBody] ChangeCountry country)
@@ -150,27 +109,20 @@ namespace Musference.Controllers
             _service.ChangeEmail(email, GetUserId());
             return Ok();
         }
-        [HttpDelete("Delete")]
+        [HttpPut("ChangeImage")]
+        [Authorize]
+        public ActionResult ChangeImage([FromBody] ChangeImage image)
+        {
+            _service.ChangeImage(image, GetUserId());
+            return Ok();
+        }
+        [HttpDelete]
         [Authorize]
         public ActionResult DeleteUser([FromBody] DeleteUser model) 
         {
             _service.DeleteUser(GetUserId(),model);
             return Ok();
         }
-        //[HttpPut("{id}/Follow")]
-        //[Authorize]
-        //public ActionResult Follow([FromRoute] int id)
-        //{
-        //    _service.Follow(id, GetUserId());
-        //    return Ok();
-        //}
-        //[HttpPut("{id}/UnFollow")]
-        //[Authorize]
-        //public ActionResult UnFollow([FromRoute] int id)
-        //{
-        //    _service.UnFollow(id, GetUserId());
-        //    return Ok();
-        //}
         protected int GetUserId()
         {
             int id = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));

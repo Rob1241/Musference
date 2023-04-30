@@ -1,36 +1,26 @@
 
 <div class="head-question">
-    <h1>All questions</h1>
-    <div class="askquest" (click)="routetoask()">
-        New question
+    <h1 class="allquestions">Pytania</h1>
+    <div class="askquest button" (click)="routetoask()">
+        Dodaj pytanie
     </div>
     <div class="question-bar">
         <form [formGroup]="form">
-            <!-- <button class="bar-elem question-search"
-            [routerLink]="'/questions'"
-            [queryParams]="{function: 'search',search:searchtext}"
-            >Search</button> -->
-            <button class="bar-elem question-search" (click)="onSearch()"
-            >Search</button>
+            <button class="bar-elem question-search button" (click)="onSearch()"
+            >Szukaj</button>
             <input class="question-search-inp" id="search" #search formControlName="search">
         </form>
-        <button (click)="onSearch()" class="bar-elem question-mostliked"
-        [routerLink]="'/questions'"
-        [queryParams]="{function:'mostliked'}">Most Liked</button>
-        <button class="bar-elem question-bestusers"
-        [routerLink]="'/questions'"
-        [queryParams]="{function:'bestusers'}"
-        >Best Users</button>
+        <button class="bar-elem question-mostliked button"(click)="mostLiked()">Polubienia</button>
     </div>
 </div>
 
-
+<div class="questions">
 <div class="question" *ngFor="let item of questions.result.questions">
     <div class="question-left">
         <div class="left-left">
-            <div class="answers">Answers:</div>
-            <div class="pluses">Pluses:</div>
-            <div class="views">Views:</div>
+            <div class="answers">Opowiedzi</div>
+            <div class="pluses">Plusy</div>
+            <div class="views">Wyświetl.</div>
         </div>
         <div class="left-right">
             <div class="num">{{item.answersAmount}}</div>
@@ -48,10 +38,27 @@
         </div>
         <div class="user-date">
             <a class="user" [href]="'http://localhost:4200/account/' + item.userId">{{item.username}}</a>
-            <div class="date">{{item.dateAdded}}</div>
+            <div class="date">Dodano: {{item.dateAdded | date:'M/d/yy, h:mm a'}}</div>
         </div>
     </div>
 </div>
-<div class="question-pagination">
-    <div class="question-pag-elem">1</div>
+</div>
+<div *ngIf="ifNewest()" class="pag-elements">
+    <div class="pag-inside">
+        <div *ngIf="pagValue()==0" class="question-pagination">
+            <div  class="emptybutton">...</div>
+            <button class="question-pag-elem">1</button>
+            <button class="question-pag-elem quest-next" (click)="next()">nast</button>
+            </div>
+        <div *ngIf="pagValue()==1" class="question-pagination">
+            <button  class="question-pag-elem quest-prev"(click)="previous()">popr</button>
+            <div class="question-pag-elem">{{questions.result.currentPage}}</div>
+            <button class="question-pag-elem quest-next" (click)="next()">nast</button>
+            </div>
+        <div *ngIf="pagValue()==2" class="question-pagination">
+            <button class="question-pag-elem quest-prev" (click)="previous()">popr</button>
+            <div class="question-pag-elem">{{questions.result.pages}}</div>
+            <div  class="emptybutton">...</div>
+        </div>
+    </div>
 </div>

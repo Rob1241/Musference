@@ -1,17 +1,26 @@
 .ask-question {
-    width: 700px;
+    width: 850px;
     padding: 50px;
+    display: flex;
+    justify-content: center;
+    
 }
 .askq-content
 {
-    width: 500px;
+    background-color:rgb(255, 255, 255);
+    border-radius: 20px;
+    width: 540px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 5px rgb(158, 158, 158);
 }
 .ask-title {
     font-size: 30px;
+    text-align: center;
 }
 .title-input {
     border: 1px solid black;
-    border-radius: 5px;
+    border-radius: 2px;
+    width: 480px;
 }
 .ask-icons {
     display: flex;
@@ -27,29 +36,19 @@
 .ask-content {
     margin: 10px;
     border: 1px solid black;
-    border-radius: 5px;
+    border-radius: 2px;
+    position: relative;
 }
 .ask-element {
     height: 40px;
     margin: 10px;
 }
 .ask-input {
-    height: 260px;
-    
-}
-.ask-tags {
-    display: flex;
-    flex-direction: row;
-    padding: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    
-}
-.ask-tag{
-    border: 1px solid black;
-    border-radius: 10px;
-    background-color: rgb(221, 221, 221);
-    margin-right:10px;
+    height: 230px;
+    width: 300px;
+    border: 0px;
+    vertical-align: top;
+    resize: none;
 }
 .ask-options {
     display: flex;
@@ -57,11 +56,64 @@
     justify-content: end;
     margin: 5px;
 }
+.ask-option:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.ask-option:active{
+    background-color: rgb(38, 0, 255);
+}
 .ask-option{
-    width: 80px;
+    position: relative;
+    right: 180px;
+    width: 120px;
     margin: 3px;
-    border: 1px solid black;
-    border-radius: 5px;
+    border-radius: 15px;
+    border:0px;
     text-align: center;
-    background-color: rgb(221, 221, 221);
+    background: rgb(64,64,189);
+    color: white;
+    background: linear-gradient(90deg, rgba(64,64,189,1) 42%, rgba(0,212,255,1) 100%);
+}
+.ask-elem{
+    margin:10px;
+    font-size: 14px;
+}
+.dragdrop{
+    position: absolute;
+    bottom: 160px;
+    left:300px;
+    height: 70px;
+    width: 178px;
+}
+.dragdropAudio{
+    position: absolute;
+    height: 80px;
+    size: 10px;
+    bottom: -31px;
+    left:300px;
+    width: 178px;
+    min-width: 0px!important;
+}
+.dropzone{
+    height: 50px;
+}
+.imgbutton{
+    position: absolute;
+    bottom: 55px;
+    left: 440px;
+    border-radius: 20px;
+}
+.audiobutton{
+    position: absolute;
+    bottom:5px;
+    left:440px;
+    border-radius: 20px;
+}
+.but:hover{
+    background-color: black;
+    color: white;
+}
+.but:active{
+    background-color: rgb(0, 225, 255);
 }

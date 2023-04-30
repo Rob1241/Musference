@@ -8,7 +8,11 @@
         public string Username { get; set; }
         public int UserId { get; set; }
         public int UserReputation { get; set; }
+
+        public string UserImage { get; set; }
         public DateTime DateAdded { get; set; }
         public int Pluses { get; set; }
+        public string AudioFile { get; set; }
+        public string ImageFile { get; set; }
     }
 }

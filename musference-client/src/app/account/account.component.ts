@@ -13,8 +13,6 @@ export class AccountComponent implements OnInit {
   user:any;
   constructor(private service: UserApiService,private router:Router, private activatedRoute:ActivatedRoute) { }
 
-  
-
   isowner(){
     if(this.activatedRoute.snapshot.paramMap.get('id')==localStorage.getItem('user_id'))
     {return true}
@@ -26,10 +24,10 @@ export class AccountComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
     this.service.getUser(this.id).subscribe(data=>{
       this.user = data;
-      
     console.log(this.activatedRoute.snapshot.paramMap.get('id'));
     console.log(localStorage.getItem('user_id'));
     })

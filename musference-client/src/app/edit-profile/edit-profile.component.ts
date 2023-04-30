@@ -9,18 +9,24 @@ import { changeName } from '../models/changeName';
 import { changeCountry } from '../models/changeCountry';
 import { changePassword } from '../models/changePasswordModel';
 import { deleteUser } from '../models/deleteUser';
-
+import { UploadService } from '../services/upload.service';
+import { changeImage } from '../models/changeImage';
+import { Router } from '@angular/router';
+import { AuthService } from '../api-services/auth.service';
+import { Subject } from 'rxjs';
 
 console.log('dsa');
 @Component({
   selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
-  styleUrls: ['./edit-profile.component.css']
+  styleUrls: ['./edit-profile.component.css'],
+  providers:[UploadService]
 })
 export class EditProfileComponent implements OnInit {
   user:any;
   form:FormGroup;
-  constructor(private service: UserApiService,private fb:FormBuilder) {
+  imageurl: any;
+  constructor(private authService:AuthService ,private router:Router, private service: UserApiService,private upload:UploadService,private fb:FormBuilder) {
     this.form = this.fb.group({
       name: ['',Validators.required],
      description: ['',Validators.required],
@@ -40,7 +46,6 @@ export class EditProfileComponent implements OnInit {
     if(userId){
     this.service.getUser(userId).subscribe(data=>{
       this.user = data;
-      console.log(data);
       this.form.get('name')?.setValue(this.user.result.name)
       this.form.get('description')?.setValue(this.user.result.description)
       this.form.get('email')?.setValue(this.user.result.email)
@@ -48,9 +53,35 @@ export class EditProfileComponent implements OnInit {
       this.form.get('city')?.setValue(this.user.result.city)
       this.form.get('contact')?.setValue(this.user.result.contact)
     })}
-    
   }
-
+  files: File[] = [];
+	onSelect(event:any) {
+		this.files.push(...event.addedFiles);
+	}
+	onRemove(event:any) {
+		this.files.splice(this.files.indexOf(event), 1);
+	}
+  onUpload(){
+    if(!this.files[0]){
+      alert('error 404 image not found')
+    }
+    const file_data = this.files[0];
+    const data = new FormData();
+    data.append('file',file_data);
+    data.append('upload_preset','musference');
+    data.append('cloud_name','da1tlcmhr');
+    this.upload.uploadImage(data).subscribe((response)=>{
+    if(response){
+      this.imageurl = response.secure_url
+    }
+    });
+  }
+  changeImage(){
+    let changeImageModel = <changeImage>{};
+    changeImageModel.imageFile = this.imageurl;
+    this.service.changeImage(changeImageModel).subscribe();
+    this.imageurl=null;
+  }
   saveChanges(){
     const val = this.form.value;
     let changeNameModel = <changeName>{};
@@ -65,7 +96,6 @@ export class EditProfileComponent implements OnInit {
     changeContactModel.contact = val.contact;
     let changeEmailModel = <changeEmail>{};
     changeEmailModel.email = val.email;
-    console.log(changeNameModel);
     this.service.changeName(changeNameModel).subscribe();
     this.service.changeDescription(changeDescriptionModel).subscribe();
     this.service.changeCity(changeCityModel).subscribe();
@@ -73,21 +103,20 @@ export class EditProfileComponent implements OnInit {
     this.service.changeContact(changeContactModel).subscribe();
     this.service.changeEmail(changeEmailModel).subscribe();
   }
-
-  deleteAccount(){
-    const formm = this.form.value;
-    let deleteUserModel = <deleteUser>{};
-    deleteUserModel.password=formm.deletepassword;
-    this.service.deleteUser(deleteUserModel).subscribe();
-  }
-
   changePassword(){
     const formm = this.form.value;
     let changePasswordModel = <changePassword>{};
     changePasswordModel.oldPassword=formm.oldpassword;
     changePasswordModel.password=formm.newpassword;
-    //console.log(changePasswordModel.oldPassword);
-    //console.log(changePasswordModel.password);
     this.service.changePassword(changePasswordModel).subscribe();
   }
+  deleteAccount(){
+    const formm = this.form.value;
+    let deleteUserModel = <deleteUser>{};
+    deleteUserModel.password=formm.deletepassword;
+    this.service.deleteUser(deleteUserModel).subscribe();
+    this.authService.logout()
+    this.router.navigate(['/']);
+  }
 }
+

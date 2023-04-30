@@ -1,17 +1,92 @@
 .edit-profile{
     display:flex;
-    flex-direction: column;
+    width: 810px;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.edit-div{
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    width: 550px;
+    padding: 60px;
+    padding-top: 60px;
+    padding-bottom: 0px;
+    box-shadow: 0px 0px 10px 2px rgb(158, 158, 158);
 }
 .edit-property{
-    width: 240px;
+    width: 220px;
+    position: relative;
+    left: 200px;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    border-radius: 2px;
+}
+.but{
+    position: relative;
+    left: 280px; 
+    margin-top: 10px;
+    border-radius: 10px;
+    border:0px;
+    width: 140px;
+    background: rgb(64,64,189);
+    background: linear-gradient(90deg, rgba(64,64,189,1) 42%, rgba(0,212,255,1) 100%);
+    color: white;
+
+}
+.but:hover{
+    background-color: black;
+    color: white;
+}
+.but:active{
+    background-color: rgb(0, 225, 255);
+}
+.left{
+    position: absolute;
+    left: 50px;
+    font-size: 15px;
+    color: black;
 }
 .edit-button{
-    width: 120px;
-    border-radius: 15px;
-}
-.delete-button{
-    width: 140px;
+    margin-bottom: 50px;
 }
 .change-password{
-    width: 140px;
+    margin-bottom: 50px;
+}
+.delete-button{
+    margin-bottom: 50px;
+}
+.image-button{
+    position: absolute;
+    bottom: 400px;
+    left: 445px;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: rgb(143, 143, 143);
+    
+}
+.image-button:hover{
+    background-color: black;
+    color: white;
+}
+.image-button:active{
+    background-color: rgb(0, 225, 255);
+}
+.dragdrop{
+    width: 220px;
+    position: relative;
+    left: 200px;
+}
+.changeimage-button{
+    position: relative;
+    margin-bottom: 50px;
+    margin-top: 15px;
+}
+.edit-text{
+    text-align: center;
+    font-size: 40px;
+    padding-bottom: 30px;
+    font-weight: 200px;
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
 }

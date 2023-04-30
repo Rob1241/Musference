@@ -24,12 +24,6 @@ namespace Musference.Controllers
             var id = _service.AddQuestion(GetUserId(), questiondto);
             return Created($"/api/Question/{id}", null);
         }
-        //[HttpGet]
-        //public ActionResult<IEnumerable<GetQuestionDto>> GetAllQuestions()
-        //{
-        //    var list = _service.GetAllQuestions();
-        //    return Ok(list);
-        //}
         [HttpGet("{page}")]
         public ActionResult<IEnumerable<GetQuestionDto>> GetAllQuestionsNewest([FromRoute] int page)
         {
@@ -40,12 +34,6 @@ namespace Musference.Controllers
         public ActionResult<IEnumerable<GetQuestionDto>> GetAllQuestionsMostLiked([FromRoute] int page)
         {
             var list = _service.GetAllQuestionsMostLiked(page);
-            return Ok(list);
-        }
-        [HttpGet("best-users/{page}")]
-        public ActionResult<IEnumerable<GetQuestionDto>> GetAllQuestionsBestUsers([FromRoute] int page)
-        {
-            var list = _service.GetAllQuestionsBestUsers(page);
             return Ok(list);
         }
         [HttpGet("Search/{page}/{text}")]
@@ -67,13 +55,6 @@ namespace Musference.Controllers
             _service.PlusQuestion(id, GetUserId());
             return Ok();
         }
-        //[HttpPut("minus/{id}")]
-        //[Authorize]
-        //public ActionResult MinusQuestion([FromRoute] int id)
-        //{
-        //    _service.MinusQuestion(id, GetUserId());
-        //    return Ok();
-        //}
         [HttpPost("{id}/Answer")]
         [Authorize]
         public ActionResult AddAnswer([FromBody] AddAnswerDto dto, [FromRoute] int id)
@@ -102,13 +83,6 @@ namespace Musference.Controllers
             _service.DeleteAnswer(id, GetUserId());
             return Ok();
         }
-        //[HttpPut("Answer/{id}/Minus")]
-        //[Authorize]
-        //public ActionResult MinusAnswer([FromRoute] int id)
-        //{
-        //    _service.MinusAnswer(id, GetUserId());
-        //    return Ok();
-        //}
         protected int GetUserId()
         {
             int id = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));

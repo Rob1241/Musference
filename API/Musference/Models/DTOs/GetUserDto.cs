@@ -18,5 +18,6 @@
         public string Country { get; set; }
         public List<GetTrackDto> TracksDto { get; set; }
         public List<GetQuestionDto> QuestionsDto { get; set; }
+        public string ImageFile { get; set; }
     }
 }

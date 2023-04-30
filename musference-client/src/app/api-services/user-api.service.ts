@@ -1,9 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LoginModel } from '../models/login-model';
-import { tap } from 'rxjs';
-import { deleteUser } from '../models/deleteUser';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +20,10 @@ export class UserApiService {
     return this.http.get<any>(this.trackAPIUrl+`/User/newest/${page}`);
   }
   getAllUsersReputation(page: number):Observable<any> {
-    return this.http.get<any>(this.trackAPIUrl+`/User/newest/${page}`);
+    return this.http.get<any>(this.trackAPIUrl+`/User/reputation/${page}`);
   }
   searchUsers(page:Number,text:Text):Observable<any>{
-    return this.http.get<any>(this.trackAPIUrl+`/User/newest/${page}/${text}`);
+    return this.http.get<any>(this.trackAPIUrl+`/User/search/${page}/${text}`);
   }
   getUser(userId:number):Observable<any>{  
     return this.http.get<any>(this.trackAPIUrl+`/User/${userId}`);
@@ -35,7 +32,7 @@ export class UserApiService {
     return this.http.post<any>(this.trackAPIUrl+'/User/Signup',data);
   }
   deleteUser(data:any){
-    return this.http.delete<any>(this.trackAPIUrl+`/User/Delete`,data);
+    return this.http.delete(this.trackAPIUrl+'/User',{ body: data});
   }
   changePassword(data:any) {  
     return this.http.put<any>(this.trackAPIUrl+'/User/ChangePassword', data);
@@ -57,5 +54,8 @@ export class UserApiService {
   }
   changeContact(data:any) {  
     return this.http.put<any>(this.trackAPIUrl+'/User/ChangeContact',data);
+  }
+  changeImage(data:any) {  
+    return this.http.put<any>(this.trackAPIUrl+'/User/ChangeImage',data);
   }
 }

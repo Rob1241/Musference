@@ -1,25 +1,46 @@
 <form [formGroup]="form" class="edit-profile">
-    <div>Name</div>
-    <input  class="edit-property" formControlName="name">
-    <div>Description</div>
-    <input class="edit-property" formControlName="description">
-    <div>City</div>
-    <input class="edit-property" formControlName="city">
-    <div>Country</div>
-    <input class="edit-property" formControlName="country">
-    <div>Contact</div>
-    <input class="edit-property" formControlName="contact">
-    <div>Email</div>
-    <input class="edit-property" formControlName="email">
-    <button class="edit-button" 
-    (click)="saveChanges()">Save Changes</button>
-    <div>ChangePassword</div>
-    <input class="edit-property old-password" formControlName="oldpassword" type="password" placeholder="Type old password" >
-    <input class="edit-property new-password" formControlName="newpassword" type="password" placeholder="Type new password" >
-    <button class="change-password" 
-    (click)="changePassword()">Change Password</button>
-    <div>Delete account</div>
-    <input class="edit-property" formControlName="deletepassword" type="password" placeholder="Type password">
-    <button class="delete-button" 
-    (click)="deleteAccount()">Delete account</button>
+    <div class="edit-div">
+        <div class="edit-text">Edycja profilu</div>
+        <div class="left">Imię</div>
+        <input  class="edit-property" formControlName="name">
+        <div class="left">Opis</div>
+        <input class="edit-property" formControlName="description">
+        <div class="left">Miasto</div>
+        <input class="edit-property" formControlName="city">
+        <div class="left">Państwo</div>
+        <input class="edit-property" formControlName="country">
+        <div class="left">Kontakt</div>
+        <input class="edit-property" formControlName="contact">
+        <div class="left">Email</div>
+        <input class="edit-property" formControlName="email">
+        <div><button class="edit-button but" 
+            (click)="saveChanges()">Zapisz</button></div>
+        <div class="left">Zmień obraz</div>
+        <div class="dragdrop">
+            <ngx-dropzone (change)="onSelect($event)">
+                <ngx-dropzone-label>Przeciągnij i upuść</ngx-dropzone-label>
+                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" 
+                *ngFor="let f of files" 
+                [file]="f"
+                [removable]="true" (removed)="onRemove(f)">
+                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                  </ngx-dropzone-image-preview>
+            </ngx-dropzone>
+        </div>
+        <div><button class="image-button" 
+            (click)="onUpload()"><i class="bi bi-cloud-download"></i></button>
+        </div>
+        <div><button class="changeimage-button but" 
+            (click)="changeImage()">Zmień obraz</button>
+        </div>
+        <div class="left">Zmień hasło</div>
+        <div><input class="edit-property old-password" formControlName="oldpassword" type="password" placeholder="Wpisz stare hasło" ></div>
+        <div><input class="edit-property new-password" formControlName="newpassword" type="password" placeholder="Wpisz nowe hasło" ></div>
+        <button class="change-password but" 
+            (click)="changePassword()">Zmień hasło</button>
+        <div class="left">Usuń konto</div>
+        <div><input class="edit-property" formControlName="deletepassword" type="password" placeholder="Wpisz hasło"></div>
+        <div><button class="delete-button but" 
+        (click)="deleteAccount()">Usuń konto</button></div>
+    </div>
 </form>

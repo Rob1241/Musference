@@ -1,50 +1,20 @@
-<!-- <form (ngSubmit)="submitForm()" [formGroup]="form" autocomplete="off">
-<div class="login">
-    <div class="log-cont-google login-cont">
-        <div class="login-text">Continue with google</div>
-    </div>
-    <div class="log-cont-apple login-cont">
-        <div class="login-text">Continue with apple</div>
-    </div>
-    <div class="log-or login-cont">
-        <div class="login-text">or</div>
-    </div>
-    <form class="log-forms">
-        <div class="log-email login-cont">
-            <input class="log-input" 
-            matInput
-            placeholder="email or username" 
-            formControlName="username">
-        </div>
-        <div class="log-pwd login-cont">
-            <input class="log-input" 
-            matInput
-            type="password"
-            placeholder="Ex. we#xg@"
-            formControlName="password">
-        </div>
-        <div class="log-continue login-cont">
-            <button class="login-text" type="submit" mat-raised-button color="primary">Login</button>
-        </div>
-    </form>
-    <div class="log-forgot-password">forgot password?</div>
-</div>
-</form> -->
-  <form [formGroup]="form">
-      <fieldset>
-          <legend>Login</legend>
-          <div class="form-field">
-              <label>Email:</label>
-              <input name="email" formControlName="email">
+<form [formGroup]="form" class="login">
+      <fieldset class="login-div">
+          <legend class="login-text">LOGOWANIE</legend>
+          <div class="form-field field">
+              <label class="loginlabel">Login lub email:</label>
+              <input placeholder="Wpisz login lub email" class="login-input"name="email" formControlName="email">
           </div>
-          <div class="form-field">
-              <label>Password:</label>
-              <input name="password" formControlName="password" 
+          <div class="form-field field">
+              <label class="loginlabel">Hasło:</label>
+              <input  placeholder="Wpisz hasło" class="login-input" name="password" formControlName="password" 
                      type="password">
           </div>
+          <div class="form-buttons field">
+            <div><button class="login-button button button-primary" 
+                    (click)="login()">Zaloguj</button>
+                </div>
+            </div>
       </fieldset>
-      <div class="form-buttons">
-          <button class="button button-primary" 
-                  (click)="login()">Login</button>
-      </div>
-  </form>
+      
+</form>

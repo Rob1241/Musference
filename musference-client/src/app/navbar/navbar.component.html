@@ -2,38 +2,27 @@
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <div>
-        <button class="btn btn-outline-secondary menu-icon-btn"data-menu-icon-btn>
-          <svg xmlns="http://www.w3.org/2000/svg" focusable="false" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-            </svg>
-      </button>
-      <a href="/questions/1" class="navbar-brand m-2">Musference</a>
+      <a href="/" class="leftnav navbar-brand m-2">Musference</a>
         </div>
         <div class="d-flex flex-row">
       <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="users/1">Users</a>
+      <li class="nav-item rightnav">
+        <button class="nav-link" (click)="tousers()" >Użytkownicy</button>
       </li>
-      <li class="nav-item">
-        <a *ngIf="isLoggedIn" class="nav-link" id="account" routerLink="account/{{userid}}">Account</a>
+      <li class="nav-item rightnav">
+        <button *ngIf="isLoggedIn" class="nav-link " id="account" (click)="account()">Moje konto</button>
       </li>
-      <li class="nav-item">
-        <a *ngIf="isLoggedOut" class="nav-link"routerLink="login" >Log-in</a>
+      <li class="nav-item rightnav">
+        <button *ngIf="isLoggedOut" class="nav-link" (click)="login()">Logowanie</button>
       </li>
-      <li class="nav-item">
-        <a *ngIf="isLoggedOut" class="nav-link"routerLink="signup" >Sign-up</a>
+      <li class="nav-item rightnav">
+        <button *ngIf="isLoggedOut" class="nav-link" (click)="signup()" >Rejestracja</button>
       </li>
-      <li class="nav-item">
-        <a *ngIf="isLoggedIn" class="nav-link logout"(click)="logout()" >Logout</a>
+      <li class="nav-item rightnav">
+        <button *ngIf="isLoggedIn" class="nav-link logout"(click)="logout()" >Wyloguj</button>
       </li>
       </ul>
       <form class="d-flex">
-        <!-- <input class="form-control me-2" type="search">
-        <button class="btn btn-outline-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-          </svg>
-        </button> -->
       </form>
       </div>
     </div>

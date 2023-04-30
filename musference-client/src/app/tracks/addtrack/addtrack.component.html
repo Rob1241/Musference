@@ -1,5 +1,40 @@
-<form [formGroup]="form">
-    <label>Enter track title</label>
-    <input name="add-track-name" formControlName="name">
-    <button class="add-button" (click)="addTrack()">Add track</button>
+<form  class="addt" [formGroup]="form">
+    <div class="addt-div">
+        <legend class="addt-text field">Dodaj nowy utwór</legend>
+        <div class="form-field field">
+            <label class="addt-label">Tutuł utworu</label>
+            <input class="addt-input"name="add-track-name" placeholder="Wpisz tytuł utworu" formControlName="name">
+        </div>
+        <div class="form-field field">
+            <label class="addt-label">Logo utworu</label>
+            <div>
+                <ngx-dropzone  class="dragdrop"(change)="onSelect($event)">
+                    <ngx-dropzone-label>Przeciągnij i upuść</ngx-dropzone-label>
+                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" 
+                    *ngFor="let f of files" 
+                    [file]="f"
+                    [removable]="true" (removed)="onRemove(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                      </ngx-dropzone-image-preview>
+                </ngx-dropzone>
+            </div>
+            <div><button class="imgbutton but" (click)="uploadImage()"><i class="bi bi-cloud-download"></i></button></div>
+            <label class="addt-label">Plik audio</label>
+            <div class="dragdropAudio">
+                <ngx-dropzone class="dropzone" (change)="onSelectAudio($event)">
+                    <ngx-dropzone-label class="xx">Przeciągnij i upuść</ngx-dropzone-label>
+                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" 
+                    *ngFor="let f of filesAudio" 
+                    [file]="f"
+                    [removable]="true" (removed)="onRemoveAudio(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                      </ngx-dropzone-image-preview>
+                </ngx-dropzone>
+            </div>
+            <div><button class="audiobutton but" (click)="uploadAudio()"><i class="bi bi-cloud-download"></i></button></div>
+        </div>
+        <div  class="form-field field ">
+            <button class="add-button"  (click)="addTrack()">Dodaj utwór</button>
+        </div>
+    </div>
 </form>

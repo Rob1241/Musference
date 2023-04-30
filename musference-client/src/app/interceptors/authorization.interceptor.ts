@@ -14,6 +14,10 @@ export class AuthorizationInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       const idToken = localStorage.getItem("id_token");
+      if (request.headers.has("InterceptorSkipHeader")) {
+        const headers = request.headers.delete("InterceptorSkipHeader");
+        return next.handle(request.clone({ headers }));
+      }
       if(idToken){
         const cloned = request.clone({
           headers: request.headers.set("Authorization",
@@ -22,7 +26,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
         return next.handle(cloned);
       }
       else{
-    return next.handle(request);
+        return next.handle(request);
       }
   }
 }

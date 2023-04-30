@@ -1,21 +1,28 @@
 .tracks-parent{
-    margin-left: 40px;
-    width: 800px;
+    width: 100%;
     position: relative;
 }
 .head-tracks{
-    background-color: rgb(229, 243, 255);
     position: relative;
     height: 110px;
     border-bottom: 1px solid black;
 }
 .alltracks{
     padding: 5px;
+    font-size: 27px;
+    position: relative;
+    top:65px;
+    left:15px;
 }
 .track-cont{
-    margin-top: 20px;
-    background-color: aliceblue;
-    
+    margin-bottom: 10px;
+    background-color: rgb(37, 37, 37);
+    color:white;
+    box-shadow: 0px 0px 1px 2px rgb(0, 0, 0);
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    border-radius: 5px;
 }
 .track-oper{
     position: absolute;
@@ -29,14 +36,15 @@
     right: 5px;
     bottom: 5px;
 }
-.track-search{
-    border: 1px solid black;
-    height: 30px;
+.tracks-likes{
+    position: absolute;
+    right: 20px;
+    bottom:15px;
+    display: flex;
+    flex-direction: row;
 }
-.track-newest{
-    border: 1px solid black;
-    margin-left: 10px;
-}
+
+
 .track-mostliked{
     border: 1px solid black;
     margin-left: 10px;
@@ -46,54 +54,50 @@
     right: 5px;
     top: 5px;
     width: 120px;
+    border-radius: 5px;
 }
 .tracks-imagge {
     height: 225px;
     width: 225px;
     object-fit: cover;
     padding: 0px;
-    border-radius: 2px;
+    border-radius: 5px;
 }
 .track-right{
     position: relative;
-    width: 100%;
-    padding: 5px;
-    padding-bottom: 40px;
+    width: 565px;
+    padding: 20px;
     height: 225px;
 }
-.track-right-up{
-    /* height: 100%;  */
+.likebutton{
     position:relative;
-    width: 540px;
-    display: flex;
-    flex-direction: column;
+    top:0px;
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border: solid 0px;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
 }
-.track-trash{
+.likebutton:hover{
+    background-color: black;
+    color: white;
+}
+.likebutton:active{
+    background-color: rgb(208, 255, 0);
+}
+.like{
     position: absolute;
-    right: 5px;
-    top: 5px;
-    font-size: 20px;
+    bottom: 5px;
+    left: 8px;
+    font-size: 22px;    
 }
-.track-taglike{
-    height: 100%;
-    position: absolute;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+.tr-lk{
+    position: relative;
+    top: 8px;
+    left: 8px;
 }
-.track-likees{
-    position: absolute;
-    right: 40px;
-    bottom: 40px; 
-    text-align: end;
-}
-.tracks-likes{
-    font-size: 25px;
-    width: 50px;
-    display: flex;
-    flex-direction: row;
-}
+
 .track-artistinfo{
     position: relative;
     left: 0;
@@ -102,75 +106,142 @@
     font-size: 30px;
 }
 .track-name{
-    font-size: 50px;
-}
-.track-tagss{
-    display: flex;
-    flex-direction: row;
-    height:28px
-}
-.track-onetag{
-    border: 1px solid black;
-    border-radius: 10px;
-    background-color: rgb(221, 221, 221);
-    margin-left:10px;
-}
-.track-cont{
-    display: flex;
-    flex-direction: row;
-    border-bottom: 1px solid black;
-    padding: 5px;
-}
-.track-right-down{
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    height: 100px;
-    width: 575px;
-}
-.track-playandtime{
-    display: flex;
-    flex-direction: row;
+    font-size: 45px;
 }
 .tracks{
     display: flex;
     flex-direction: column;
-    width:800px;
-    gap:10px
-}
-.track-play{
-    position: relative;
-    
-    
-}
-.track-date {
-    position: relative;
-    top: 8px;
-}
-.track-time{
-    position: relative;
-    bottom: -21px;
-    height: 0px;
-    font-size: 20px;
-}
-.play{
-    font-size: 60px;
-    height: 80px;
-    position: relative;
-    top:20px;
-}
-.like{
-    font-size: 35px;
-    position: relative;
-    top: 25px;
-    margin-right: 15px;
+    gap:10px;
+    padding: 20px;
 }
 .tl{
     border: 1px solid black;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(63, 11, 11);
     margin-left:10px;
 }
-.tr-lk{
+.button:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.button:active{
+    background-color: rgb(38, 0, 255);
+}
+.question-pagination{
+    position: absolute;
+    margin-top: 10px;
+    left:0px;
+    display:flex;
+    flex-direction: row;
+}
+.question-pag-elem{
+    border-radius: 5x;
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border: solid 0px;
+    width: 25px;
+    border-radius: 5px;
+    margin-right: 2px;
+    text-align: center;
+}
+.quest-next{
+    width: 50px;
+}
+.quest-prev{
+    width: 50px;
+}
+.track-mostliked{
+    border-radius: 5px;
+}
+.trashbutton{
     position: relative;
-    top: 35px;
+    left:435px;
+    bottom:180px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border:solid 0px black;
+}
+.track-trash{
+    position: absolute;
+    right: 10px;
+    top: 2px;
+    font-size: 21px;
+}
+.trashbutton:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.trashbutton:active{
+    background-color: rgb(38, 0, 255);
+}
+
+
+.stop{
+    margin-left: 8px;
+}
+.sound{
+    position: relative;
+    top:15px;
+}
+.playbutton{
+    position:relative;
+    top:-15px;
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border: solid 0px;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+}
+.playbutton:hover{
+    background-color: black;
+    color: white;
+}
+.playbutton:active{
+    background-color: rgb(208, 255, 0);
+}
+.play{
+    position: absolute;
+    bottom: -2px;
+    left: 3px;
+    font-size: 34px;
+}
+.pag-elements{
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: center;
+}
+.pag-inside{
+    position: relative;
+    width: 100px;
+    right:20px;
+    background-color: rgb(255, 87, 241);
+}
+.emptybutton{
+    width: 50px;
+    opacity: 0;
+}
+.button{
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border: solid 0px;
+    border-radius: 15px;
+}
+.track-search{
+    height: 30px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.pause{
+    position: relative;
+    top: 1px;
+    font-size: 30px;
+    margin-left: 8px;
+}
+.bi-pause-fill{
+    position: relative;
+    bottom: 6px;
+    right: 1px;
 }

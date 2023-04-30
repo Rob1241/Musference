@@ -4,27 +4,27 @@ import { LoginModel } from '../models/login-model';
 import jwt_decode from 'jwt-decode';
 import {shareReplay, tap } from 'rxjs/operators';
 import * as dayjs from 'dayjs'
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  isLoggedInUser = new Subject<boolean>(); 
   readonly trackAPIUrl ="https://localhost:7289/api";
 
   constructor(private http:HttpClient) { }
   Login(model: LoginModel) {  
     return this.http.post<any>(this.trackAPIUrl+'/User/Login',model)
-    .pipe(tap((response:any)=>this.setSession(response))
+    .pipe(tap((response:any)=>{
+      this.isLoggedInUser.next(true)
+      this.setSession(response)})
     ,shareReplay());
   }
 
   private setSession(authResult: any) {
     const tokenInfo = this.getDecodedAccessToken(authResult.result);
-    //const tokenInfo = this.parseJwt(authResult.result);
     const expiresAt = tokenInfo.exp;
-    //console.log(tokenInfo.exp);
-    //console.log(tokenInfo);
     const decodedId = tokenInfo['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
     localStorage.setItem('id_token', authResult.result);
     localStorage.setItem('expires_at', expiresAt);

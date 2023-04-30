@@ -13,17 +13,7 @@ namespace Musference.Data
         public DbSet<Answer> AnswersDbSet { get; set; }
         public DbSet<Question> QuestionsDbSet { get; set; }
 
-        public DbSet<Tag> TagsDbSet { get; set; }
-
         public DbSet<User> UsersDbSet { get; set; }
-
-        public DbSet<Role> Roles { get; set; }
-        //public DbSet<ResetCodeModel> PasswordResetDbSet { get; set; }
-        //public DbSet<ReportedQuestion> ReportedQuestionsDbSet { get; set; }
-        //public DbSet<ReportedTrack> ReportedTracksDbSet { get; set; }
-        //public DbSet<ReportedAnswer> ReportedAnswersDbSet { get; set; }
-
-        //public DbSet<ReportedUser> ReportedUsersDbSet { get; set; }
 
         public DbSet<Track> TracksDbSet { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +26,18 @@ namespace Musference.Data
                 .Property(u => u.City).IsRequired(false);
             modelBuilder.Entity<User>()
                 .Property(u => u.Contact).IsRequired(false);
+            modelBuilder.Entity<Question>()
+                .Property(q=>q.AudioFile).IsRequired(false);
+            modelBuilder.Entity<Question>()
+                .Property(q => q.ImageFile).IsRequired(false);
+            modelBuilder.Entity<Answer>()
+                .Property(q => q.AudioFile).IsRequired(false);
+            modelBuilder.Entity<Answer>()
+                .Property(q => q.ImageFile).IsRequired(false);
+            modelBuilder.Entity<Track>()
+                .Property(q => q.LogoFile).IsRequired(false);
+            modelBuilder.Entity<User>()
+                .Property(q => q.ImageFile).IsRequired(false);
             modelBuilder.Entity<Answer>()
                         .HasOne(a => a.User)
                         .WithMany(u => u.Answers);

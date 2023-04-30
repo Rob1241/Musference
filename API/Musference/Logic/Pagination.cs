@@ -12,7 +12,7 @@ namespace Musference.Logic
     {
         public UsersResponse UserPagination(List<User> sortedusers, float pageResults, int page, double pageCount);
         public TrackResponse TrackPagination(List<Track> sortedtrack, float pageResults, int page, double pageCount);
-        public OneQuestionResponse AnswerPagination(List<Answer> answers, float pageResults, int page, double pageCount, Question question);
+        public OneQuestionResponse AnswerPagination(List<Answer> answers, float pageResults, int page, double pageCount, Question question, int answersAmount);
         public QuestionsResponse QuestionPagination(List<Question> sortedquestion, float pageResults, int page, double pageCount);
     }
 
@@ -72,7 +72,7 @@ namespace Musference.Logic
 
             return response;
         }
-        public OneQuestionResponse AnswerPagination(List<Answer> answers, float pageResults, int page, double pageCount, Question question)
+        public OneQuestionResponse AnswerPagination(List<Answer> answers, float pageResults, int page, double pageCount, Question question, int answersAmount)
         {
             List<GetAnswerDto> answerListDto = new List<GetAnswerDto>();
             if (page > (int)pageCount)
@@ -90,7 +90,8 @@ namespace Musference.Logic
                 Answers = answerListDto,
                 CurrentPage = page,
                 Pages = (int)pageCount,
-                Question = questionDto
+                Question = questionDto,
+                AnswersAmount = answersAmount
             };
             return response;
         }

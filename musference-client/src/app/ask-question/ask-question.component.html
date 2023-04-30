@@ -1,27 +1,38 @@
 <form [formGroup]="form" class="ask-question">
     <div class="askq-content">
-        <div class="ask-title ask-element">Ask new question</div>
-        <input class="title-input ask-element" formControlName="heading">
-        <!-- <div class="title-input ask-element"></div> -->
-        <div class="ask-text ask-element">content</div>
+        <div class="ask-title ask-element">Dodaj nowe pytanie</div>
+        <div class="ask-elem">Nagłówek</div>
+        <input class="title-input ask-element"  placeholder="Wpisz nagłówek" formControlName="heading">
+        <div class="ask-text ask-elem">Treść</div>
         <div class="ask-content">
-            <div class="ask-icons">
-                <div class="ask-icon"><i class="bi bi-type-bold"></i></div>
-                <div class="ask-icon"><i class="bi bi-type-italic"></i></div>
-                <div class="ask-icon"><i class="bi bi-soundwave"></i></div>
-                <div class="ask-icon"><i class="bi bi-card-image"></i></div>
+            <input class="ask-input" placeholder="Wpisz treść" formControlName="content">
+            <div class="dragdrop">
+                <ngx-dropzone (change)="onSelect($event)">
+                    <ngx-dropzone-label>Przeciągnij i upuść</ngx-dropzone-label>
+                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" 
+                    *ngFor="let f of files" 
+                    [file]="f"
+                    [removable]="true" (removed)="onRemove(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                      </ngx-dropzone-image-preview>
+                </ngx-dropzone>
             </div>
-            <input class="ask-input" formControlName="content">
-        </div>
-        <div class="ask-text ask-element">tags</div>
-        <div class="ask-tags ask-element">
-            <div class="ask-tag">tag1</div>
-            <div class="ask-tag">tag2</div>
-            <div class="ask-tag">tag3</div>
+            <div><button class="imgbutton but" (click)="uploadImage()"><i class="bi bi-cloud-download"></i></button></div>
+            <div class="dragdropAudio">
+                <ngx-dropzone class="dropzone" (change)="onSelectAudio($event)">
+                    <ngx-dropzone-label class="xx">Przeciągnij i up.</ngx-dropzone-label>
+                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" 
+                    *ngFor="let f of filesAudio" 
+                    [file]="f"
+                    [removable]="true" (removed)="onRemoveAudio(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                      </ngx-dropzone-image-preview>
+                </ngx-dropzone>
+            </div>
+            <div><button class="audiobutton but" (click)="uploadAudio()"><i class="bi bi-cloud-download"></i></button></div>
         </div>
         <div class="ask-options ask-element">
-            <div class="ask-option">discard</div>
-            <button class="ask-option" (click)="addQuestion()">ask</button>
+            <button class="ask-option" (click)="addQuestion()">Dodaj</button>
         </div>
     </div>
 </form>

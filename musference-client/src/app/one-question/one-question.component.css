@@ -1,45 +1,80 @@
-.one-quest-container
-{
-    padding: 30px;
-}
+
 .one-question{
+    position: relative;
+    width: 799px;
+    padding:20px;
     display: flex;
     flex-direction: row;
     padding-bottom: 20px;
+    border: 0px;
+    z-index: 2;
+    background-color: rgb(46, 46, 46);
+    border-bottom: 1px rgb(184, 184, 184) solid;
+    color:rgb(204, 204, 204);
+}
+.onequestglobal{
+    position: relative;
+    background-color: rgb(46, 46, 46);
+    padding-top: 50px;
+    padding-bottom: 50px;
+    z-index: 1;
+}
+.one-alias{
+    text-align: center;
+}
+.one-rep{
+    text-align: center;
 }
 .one-quest-answer{
     display: flex;
     flex-direction: row;
-    padding-top: 35px;
+    padding: 20px;
+    box-shadow: 0px 0px 5px 1px rgb(168, 168, 168);
+    border-radius: 20px;
+    margin: 20px;
+    background-color: rgb(46, 46, 46);
+    color: rgb(204, 204, 204);
 }
 .one-plus-minus {
-    width: 25px;
+    width: 40px;
+    padding: 5px;
 }
 .one-content{
-    padding-left: 10px;
-    width: 600px;
+    margin-left: 20px;
+    width: 700px;
+    color: rgb(63, 63, 63);
 }
-.one-quest-content{
-    border: 1px solid black;
-    padding-left: 25px;
-    padding-top: 5px;
-    height: 150px;
+.one-plus-item{
+    text-align: center;
+    
+}
+.one-heart{
+    padding: 10px;
+    width: 70px;
+    padding-top: 25px;
+}
+.answer-added{
+    position:absolute;
+    right: 15px;
+    bottom: 5px;
+}
+.xd{
+    border-radius: 5px;
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border: solid 0px;
+    height: 30px;
 }
 .one-heading{
     display: flex;
     flex-direction: row;
-    border: 1px solid black;
+    padding: 10px;
+    border-bottom: 1px solid rgb(156, 156, 156);
     height: 80px;
     width: 100%;
+    position:relative;
 }
-.one-answer-cont{
-    display: flex;
-    flex-direction: row;
-    border: 1px solid black;
-    height: 200px;
-    width: 100%;
-    padding: 5px;
-}
+
 .one-logo-logo{
     width: 100px;
     height: 100px;
@@ -56,22 +91,65 @@
     display: flex;
     flex-direction: row;
 }
+.one-answer{
+    padding-top: 20px;
+    padding-left: 10px;
+    max-width: 470px;
+}
+.questo{
+    border: 1px solid rgb(134, 134, 134);
+    background-color: rgb(250, 250, 250);
+}
 .one-question-tag{
     border: 1px solid black;
     border-radius: 10px;
-    background-color: rgb(221, 221, 221);
     margin-right:10px;
 }
 .one-heading-right{
     width: 100%;
-    margin-left: 10px;
+    padding-left: 10px;
     position: relative;
 }
 .onequest-trash{
     position:absolute;
     right: 5px;
+    color: white;
     font-size: 20px;
-    top:5px
+    top:0px
+}
+.trashbuttonq{
+    background-color:  rgb(64,64,189);
+    border: 0px;
+    border-radius: 5px;
+    position: relative;
+    bottom:40px;
+    width:30px;
+    height: 35px;
+    left:538px;
+}
+.trashbuttonq:active{
+    background-color: rgb(248, 248, 7);
+}
+.trashbuttonq:hover{
+    background-color: black;
+    color: white;
+}
+.trashbutton{
+    position: absolute;
+    top:20px;
+    width:30px;
+    height: 35px;
+    left:475px;
+    border-radius:5px ;
+    border: 0px;
+    background-color:  rgb(64,64,189);
+}
+.trashbutton:active{
+    background-color: rgb(248, 248, 7);
+}
+.trashbutton:hover{
+    background-color: black;
+    color: white;
 }
 .one-info{
     position: absolute;
@@ -80,18 +158,45 @@
 }
 .one-views{
     position: absolute;
-    right: 0px;
+    right: 10px;
 }
-.added-lasta{
-    margin-right: 5px;
+.like:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
 }
+.like:active{
+    background-color: rgb(255, 252, 53);
+}
+.one-quest-submit:hover{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.one-quest-submit:active{
+    background-color: rgb(38, 0, 255);
+}
+
 .one-quest-form{
-    width: 590px;
-    margin-left: 110px;
+    padding-top: 20px;
+    padding-left: 220px;
+    height: 330px;
+    box-shadow: 0px 0px 4px 2px rgb(97, 97, 97);
+    width: 670px;
+    position: relative;
+    left: 60px;
+    border-radius: 3px;
+    background-color: white;
+}
+.one-quest-cnt{
+    border: 1px solid rgb(134, 134, 134);
+    background-color: rgb(231, 231, 231);
+    width: 640px;
+    position: relative;
+    right:205px;
 }
 .one-quest-ya{
     font-size: 25px;
     padding-left: 10px;
+    margin-bottom: 10px;
 }
 .one-quest-media{
     display: flex;
@@ -102,18 +207,175 @@
     margin-left: 15px;
 }
 .one-quest-input{
-    height: 100px;
-    width: 588px;
+    height: 200px;
+    width: 460px;
     padding-left: 10px;
     border: 0px;
-    border-top: 1px solid black;
+    border-right: 1px solid black;
 }
-.one-quest-cnt{
-    border: 1px solid black;
-}
+
 .one-quest-submit{
     position: absolute;
-    right: 210px;
+    right: 275px;
     margin-top: 4px;
-    border: 1px solid black;;
+    background: rgb(64,64,189);
+    background: linear-gradient(90deg, rgba(64,64,189,1) 42%,
+     rgba(0,212,255,1) 100%);
+    color: white;
+    border: solid 0px;
+    border-radius: 10px;
+}
+.one-resta{
+    padding-top: 20px;
+    padding-left: 140px;
+    padding-bottom: 10px;
+    font-size: 30px;
+    width: 800px;
+    border-top: 1px solid black;
+}
+.question-pagination{
+    position: absolute;
+    margin-top: 10px;
+    left:0px;
+    display:flex;
+    flex-direction: row;
+}
+.question-pag-elem{
+    border-radius: 5x;
+    border: solid 1px;
+    background-color: rgb(196, 196, 196);
+    width: 25px;
+    border-radius: 5px;
+    margin-right: 5px;
+    text-align: center;
+}
+.quest-next{
+    width: 50px;
+}
+.quest-prev{
+    width: 50px;
+}.dz{
+    position: relative;
+}
+.dragdrop{
+    position: absolute;
+    width:180px;
+    bottom:60px;
+    left:460px;
+    height: 140px;
+}
+.dropzone{
+    position: absolute;
+    bottom: 0px;
+    height: 60px;
+    width: 180px;
+    left:460px;
+}
+.audiobutton{
+    position: absolute;
+    left:605px;
+    bottom:5px;
+    border-radius: 20px;
+}
+.imgbutton{
+    position: absolute;
+    left:605px;
+    bottom:65px;
+    border-radius: 20px;
+}
+.but:hover{
+    background-color: black;
+    color: white;
+}
+.but:active{
+    background-color: rgb(0, 225, 255);
+}
+.one-imageq{
+    height:200px;
+    position: relative;
+    top: 00px;
+    left:0px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+.one-quest-content{
+    padding-left: 60px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    min-height: 150px;
+    max-height: 1400px;
+    position:relative;
+}
+.one-heading-right{
+    width: 100%;
+    padding-left: 10px;
+    position: relative;
+}
+.answer-inside{
+    width: 100%;
+    padding-bottom: 10px;
+    position: relative;
+}
+.one-answer-cont{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    top: 00px;
+    border: 1px solid rgb(158, 158, 158);
+    background-color: rgb(250, 250, 250);
+    border-radius: 0px;
+    min-height: 150px;
+    max-height: 1400px;
+    width: 100%;
+    padding: 5px;
+}
+.soundbutton{
+    border-radius: 5px;
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border: 0px solid black;
+}
+.sound{
+    margin-top: 10px;
+    border-top:0px solid black;
+    border-bottom:0px solid black;
+    width:94px;
+    border-radius: 10px;
+}
+.xx{
+    margin-left: 2px;
+    position: relative;
+    left:5px;
+}
+.pag-elements{
+    
+    height:50px;
+    display: flex;
+    justify-content: center;
+}
+.pag-inside{
+    position: relative;
+    width: 100px;
+    right:20px;
+}
+.one-quest-container
+{
+    padding-bottom: 20px;
+}
+
+.emptybutton{
+    width: 50px;
+    opacity: 0;
+}
+.question-pag-elem{
+    background-color: rgba(64,64,189,1);
+    color: white;
+    border: solid 0px;
+}
+.pause{
+    margin-left: 7px;
+}
+.bi-pause-fill{
+    position: relative;
+    bottom: 1px;
 }

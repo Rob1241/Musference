@@ -15,21 +15,15 @@ namespace Musference.Services
         public Task<QuestionsResponse> SearchQuestion(string text,int page);
         public Task<QuestionsResponse> GetAllQuestionsNewest(int page);
         public Task<QuestionsResponse> GetAllQuestionsMostLiked(int page);
-        public Task<QuestionsResponse> GetAllQuestionsBestUsers(int page);
 
         public Task<int> AddQuestion(int userID, AddQuestionDTO questiondto);
-        //public IEnumerable<GetQuestionDto> GetAllQuestions();
         public Task<OneQuestionResponse> GetQuestion(int id, int page);
 
         public void PlusQuestion(int id, int userId);
         public void DeleteQuestion(int id, int userId);
         public void DeleteAnswer(int id, int userId);
-        //public void MinusQuestion(int id, int userId);
         public Task<int> AddAnswer(AddAnswerDto dto, int id, int userId);
         public void PlusAnswer(int id, int userId);
-        //public void ReportQuestion(int id, int userId, string reason);
-        //public void ReportAnswer(int id, int userId, string reason);
-        //public void MinusAnswer(int id, int userId);
     }
     public class QuestionService : IQuestionService
     {
@@ -44,7 +38,7 @@ namespace Musference.Services
         }
         public async Task<QuestionsResponse> SearchQuestion(string text, int page)
         {
-            var pageResults = 10f;
+            var pageResults = 25f;
             var questionList = await _context.QuestionsDbSet
                                         .Where(c => (c.Content.ToLower().Contains(text.ToLower()))
                                         || c.Heading.ToLower().Contains(text.ToLower()))
@@ -68,56 +62,37 @@ namespace Musference.Services
             await _context.SaveChangesAsync();
             return new_question.Id;
         }
-        //public IEnumerable<GetQuestionDto> GetAllQuestions()
-        //{
-        //    List<GetQuestionDto> questionListDto = new List<GetQuestionDto>();
-        //    var questionList = _context.QuestionsDbSet.ToList();
-        //    foreach (var item in questionList)
-        //    {
-        //        var getquestiondto = _mapper.Map<GetQuestionDto>(item);
-        //        questionListDto.Add(getquestiondto);
-        //    }
-        //    return questionListDto;
-        //}
         public async Task<QuestionsResponse> GetAllQuestionsNewest(int page)
         {
             var pageResults = 10f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
             var sortedquestion = await _context.QuestionsDbSet
                 .Include(q=>q.User)
-                .OrderBy(q=>q.DateAdded).ToListAsync();
+                .OrderByDescending(q=>q.DateAdded).ToListAsync();
             var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
         public async Task<QuestionsResponse> GetAllQuestionsMostLiked(int page)
         {
-            var pageResults = 10f;
+            var pageResults = 25f;
             var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
             var sortedquestion = await _context.QuestionsDbSet
                 .Include(q=>q.User)
-                .OrderByDescending(q => q.Pluses).ToListAsync();
-            var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
-            return response;
-        }
-        public async Task<QuestionsResponse> GetAllQuestionsBestUsers(int page)
-        {
-            var pageResults = 10f;
-            var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
-            var sortedquestion = await _context.QuestionsDbSet
-                .Include(q => q.User)
-                .OrderByDescending(q => q.User.Reputation).ToListAsync();
+                .OrderByDescending(q => q.Pluses)
+                .Take(20)
+                .ToListAsync();
             var response = _pagination.QuestionPagination(sortedquestion, pageResults, page, pageCount);
             return response;
         }
         public async Task<OneQuestionResponse> GetQuestion(int id, int page)
         {
-            var pageResults = 10f;
-            var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
+            var pageResults = 7f;
+            //var pageCount = Math.Ceiling(_context.QuestionsDbSet.Count() / pageResults);
+            
             var question = await _context.QuestionsDbSet
                 .Include(q=>q.User)
                 .Include(q => q.Answers)
                 .ThenInclude(a=>a.User)
-                .Include(q => q.Tags)
                 .FirstOrDefaultAsync(q => q.Id == id);
             if (question == null)
             {
@@ -126,10 +101,17 @@ namespace Musference.Services
             question.Views++;
             await _context.SaveChangesAsync();
             var answers = question.Answers
+                .OrderByDescending(a=>a.DateAdded)
                 .Skip((page - 1) * (int)pageResults)
                 .Take((int)pageResults)
                 .ToList();
-            var response = _pagination.AnswerPagination(answers, pageResults, page, pageCount,question);
+            var pageCount = Math.Ceiling(question.Answers.Count() / pageResults);
+            if(pageCount == 0)
+            {
+                pageCount = 1;
+            }
+            var answersAmount = question.Answers.Count();
+            var response = _pagination.AnswerPagination(answers, pageResults, page, pageCount,question,answersAmount);
             return response;
         }
         public async void PlusQuestion(int id, int userId)
@@ -160,25 +142,6 @@ namespace Musference.Services
             question.Pluses++;
             await _context.SaveChangesAsync();
         }
-        //public void MinusQuestion(int id, int userId)
-        //{
-        //    var question = _context.QuestionsDbSet.FirstOrDefault(u => u.Id == id);
-        //    var user = _context.UsersDbSet.FirstOrDefault(u => u.Id == userId);
-        //    var usersliked = question.UsersThatLiked;
-        //    if (usersliked != null)
-        //    {
-        //        foreach (User userloop in usersliked)
-        //        {
-        //            if (userloop.Id == userId)
-        //            {
-        //                //Tu jakis blad
-        //            }
-        //        }
-        //    }
-        //    user.QuestionsLiked.Add(question);
-        //    question.Minuses++;
-        //    _context.SaveChanges();
-        //}
         public async Task<int> AddAnswer(AddAnswerDto dto, int id, int userId)
         {
             var new_answer = _mapper.Map<Answer>(dto);
@@ -242,38 +205,16 @@ namespace Musference.Services
         }
         public async void DeleteAnswer(int id, int userId)
         {   
-            var answer = await _context.AnswersDbSet.FirstOrDefaultAsync(a => a.Id == id);
+            var answer = await _context.AnswersDbSet
+                .Include(a=>a.Question)
+                .FirstOrDefaultAsync(a => a.Id == id);
             if (answer == null)
                 throw new NotFoundException("Answer not found");
             if(answer.UserId != userId)
                 throw new UnauthorizedException("Unauthorizes method");
+            answer.Question.AnswersAmount--;
             _context.AnswersDbSet.Remove(answer);
             await _context.SaveChangesAsync();
         }
-        //public void ReportQuestion(int id, int userId, string reason)
-        //{
-
-        //}
-        //public void ReportAnswer(int id, int userId, string reason)
-        //{
-
-        //}
-        //public void MinusAnswer(int id, int userId)
-        //{
-        //    var answer = _context.AnswersDbSet.FirstOrDefault(u => u.Id == id);
-        //    var usersliked = answer.UsersThatLiked;
-        //    if (usersliked != null)
-        //    {
-        //        foreach (User user in usersliked)
-        //        {
-        //            if (user.Id == userId)
-        //            {
-        //                //Tu jakis blad
-        //            }
-        //        }
-        //    }
-        //    answer.Minuses++;
-        //    _context.SaveChanges();
-        //}
     }
 }

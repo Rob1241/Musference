@@ -33,10 +33,13 @@ export class LoginComponent {
           this.authService.Login(model)
               .subscribe(
                   () => {
-                      console.log("User is logged in");
-                      this.router.navigateByUrl('/questions');
+                      this.router.navigateByUrl('/questions/1');
                   }
               );
       }
+      
+  }
+  ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 }

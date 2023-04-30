@@ -1,3 +1,7 @@
+body{
+  border-bottom-left-radius: 23px;
+  border-top: solid white 0px;
+}
 .sidebar-list {
   padding: 0;
   flex-direction: column;
@@ -9,14 +13,25 @@
 .sidebar-link {
   display: flex;
   padding: .5rem 0;
-  color: var(--light-gray);
+  color:rgb(255, 255, 255);
   text-decoration: none;
   align-items: center;
   padding-left: 25px;
 }
 .sidebar{
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(37, 37, 37);
   width: 200px;
   margin-top: 0px;
+  border-bottom-left-radius: 20px;
 }
-
+.hidden-sidebar{
+  border:0px;
+  background-color: rgb(37, 37, 37);
+  color:rgb(255, 255, 255);
+}
+.hidden-sidebar:focus{
+  color: rgba(0,212,255,1);
+}
+.hidden-sidebar:hover{
+  color: rgba(0,212,255,1);
+}

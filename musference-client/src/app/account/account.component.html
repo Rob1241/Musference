@@ -1,121 +1,29 @@
 <div class="account-container">
     <div class="account">
         <div class="image-account">
-            <img class="image-acc-im" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw" alt="Image" width="500" height="333"/>
+            <img class="image-acc-im" src={{user.result.imageFile}} alt="Image" width="500" height="333"/>
         </div>
         <div class="account-description">
-            <button *ngIf="isowner()" button class="account-edit" (click)="route()"> Edit profile</button>
+            <button *ngIf="isowner()" button class="account-edit" (click)="route()">Edycja profilu</button>
             <div class="nick">{{user.result.name}}</div>
             <div class="origin">{{user.result.city}}, {{user.result.country}}</div>
             <div class="description">{{user.result.description}}</div>
             
         </div>
-        <div class="account-stats">Statistics
-            <div>Reputation: {{user.result.reputation}}</div>
-            <div>Joined: {{user.result.dateAdded}}</div>
+        <div class="account-stats">
+            <div class="stats">Statystyki</div>
+            <div class="lfont">{{user.result.reputation}}</div>
+            <div class="sfont">reputacja </div>
+            <div class="lfont">{{user.result.dateAdded | date:'M/d/yy, h:mm a'}}</div>
+            <div class="sfont">dołączono</div>
         </div>
         <div class="account-contact">
-            <div class="cont">Email: {{user.result.email}}</div>
-            <div class="cont">Contact: {{user.result.contact}}</div>
+            <div class="stats">Kontakt</div>
+            <div class="lfont">{{user.result.email}}</div>
+            <div  class="cont sfont">email</div>
+            <div class="lfont">{{user.result.contact}}</div>
+            <div   class="cont sfont">inny kontakt</div>
         </div>
     </div>
-    <!-- <div class="tracks-account">
-        <div class="account-track">
-            <div class="a-track">
-                <div class="a-tracks-img">
-                    <img class="a-tracks-imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-                </div>
-                <div class="a-tracks-info">
-                    <div class="a-tracks-artist">Robert</div>
-                    <div class="a-tracks-title">Song</div>
-                    <div class="a-track-tags">
-                        <div class="a-track-tag">tag1</div>
-                        <div class="a-track-tag">tag2</div>
-                        <div class="a-track-tag">tag3</div>
-                    </div>
-                    <div class="a-tracks-date">Added 2 days ago</div>
-                </div>
-                
-            </div>
-            <div class="a-track-len">
-                <div class="a-track-stop"><i class="bi bi-play-fill"></i></div>
-                <div class="a-track-wave"></div>
-                <div class="a-track-loudness"><i class="bi bi-speaker"></i></div>
-                <div class="a-track-like"><i class="bi bi-heart-fill"></i></div>
-            </div>
-        </div>
-        <div class="account-track">
-            <div class="a-track">
-                <div class="a-tracks-img">
-                    <img class="a-tracks-imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-                </div>
-                <div class="a-tracks-info">
-                    <div class="a-tracks-artist">Robert</div>
-                    <div class="a-tracks-title">Song</div>
-                    <div class="a-track-tags">
-                        <div class="a-track-tag">tag1</div>
-                        <div class="a-track-tag">tag2</div>
-                        <div class="a-track-tag">tag3</div>
-                    </div>
-                    <div class="a-tracks-date">Added 2 days ago</div>
-                </div>
-                
-            </div>
-            <div class="a-track-len">
-                <div class="a-track-stop"><i class="bi bi-play-fill"></i></div>
-                <div class="a-track-wave"></div>
-                <div class="a-track-loudness"><i class="bi bi-speaker"></i></div>
-                <div class="a-track-like"><i class="bi bi-heart-fill"></i></div>
-            </div>
-        </div>
-        <div class="account-track">
-            <div class="a-track">
-                <div class="a-tracks-img">
-                    <img class="a-tracks-imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-                </div>
-                <div class="a-tracks-info">
-                    <div class="a-tracks-artist">Robert</div>
-                    <div class="a-tracks-title">Song</div>
-                    <div class="a-track-tags">
-                        <div class="a-track-tag">tag1</div>
-                        <div class="a-track-tag">tag2</div>
-                        <div class="a-track-tag">tag3</div>
-                    </div>
-                    <div class="a-tracks-date">Added 2 days ago</div>
-                </div>
-                
-            </div>
-            <div class="a-track-len">
-                <div class="a-track-stop"><i class="bi bi-play-fill"></i></div>
-                <div class="a-track-wave"></div>
-                <div class="a-track-loudness"><i class="bi bi-speaker"></i></div>
-                <div class="a-track-like"><i class="bi bi-heart-fill"></i></div>
-            </div>
-        </div>
-        <div class="account-track">
-            <div class="a-track">
-                <div class="a-tracks-img">
-                    <img class="a-tracks-imgg" src="https://play-lh.googleusercontent.com/LDBkbGDP2I8RH4MGcRMPkgIB1R4Nl7MHxLcbYvOmjB5tEj6xrklDRUju6B2BA_B5hbg=w240-h480-rw">
-                </div>
-                <div class="a-tracks-info">
-                    <div class="a-tracks-artist">Robert</div>
-                    <div class="a-tracks-title">Song</div>
-                    <div class="a-track-tags">
-                        <div class="a-track-tag">tag1</div>
-                        <div class="a-track-tag">tag2</div>
-                        <div class="a-track-tag">tag3</div>
-                    </div>
-                    <div class="a-tracks-date">Added 2 days ago</div>
-                </div>
-                
-            </div>
-            <div class="a-track-len">
-                <div class="a-track-stop"><i class="bi bi-play-fill"></i></div>
-                <div class="a-track-wave"></div>
-                <div class="a-track-loudness"><i class="bi bi-speaker"></i></div>
-                <div class="a-track-like"><i class="bi bi-heart-fill"></i></div>
-            </div>
-        </div>
-    </div> -->
 </div>
 

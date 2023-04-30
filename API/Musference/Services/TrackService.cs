@@ -19,8 +19,6 @@ namespace Musference.Services
         public Task<int> AddTrack(int id, AddTrackDto dto);
         public void DeleteTrack(int id, int userId);
         public void LikeTrack(int id, int userId);
-        //public void ReportTrack(int id, int userId, string reason);
-        //public void UnLikeTrack(int id);
     }
     public class TrackService : ITrackService
     {
@@ -36,7 +34,7 @@ namespace Musference.Services
         }
         public async Task<TrackResponse> SearchTrack(string text, int page)
         {
-            var pageResults = 10f;
+            var pageResults = 20f;
             var listToReturn = await _context.TracksDbSet
                                         .Where(c => (c.Artist.ToLower().Contains(text.ToLower()))
                                         || c.Title.ToLower().Contains(text.ToLower()))
@@ -47,15 +45,15 @@ namespace Musference.Services
         }
         public async Task<TrackResponse> GetAllTrackNewest(int page)
         {
-            var pageResults = 10f;
+            var pageResults = 7f;
             var pageCount = Math.Ceiling(_context.TracksDbSet.Count() / pageResults);
-            var sortedtrack = await _context.TracksDbSet.OrderBy(t => t.DateAdded).ToListAsync();
+            var sortedtrack = await _context.TracksDbSet.OrderByDescending(t => t.DateAdded).ToListAsync();
             var response = _pagination.TrackPagination(sortedtrack, pageResults, page, pageCount);
             return response;
         }
         public async Task<TrackResponse> GetAllTrackMostLiked(int page)
         {
-            var pageResults = 10f;
+            var pageResults = 20f;
             var pageCount = Math.Ceiling(_context.TracksDbSet.Count() / pageResults);
             var sortedtrack = await _context.TracksDbSet.OrderByDescending(t => t.Likes).ToListAsync();
             var response = _pagination.TrackPagination(sortedtrack, pageResults, page, pageCount);
@@ -71,6 +69,7 @@ namespace Musference.Services
                 throw new NotFoundException("User not found");
             }
             var track = _mapper.Map<Track>(dto);
+            track.DateAdded = DateTime.Now;
             track.Artist = user.Name;
             await _context.TracksDbSet.AddAsync(track);
             user.Tracks.Add(track);
@@ -119,18 +118,8 @@ namespace Musference.Services
             }
             user.TracksLiked.Add(track);
             track.Likes++;
-            trackowner.Reputation++;
+            trackowner.Reputation+=5;
             await _context.SaveChangesAsync();
         }
-        //public void UnLikeTrack(int id)
-        //{
-        //    var track = _context.TracksDbSet.FirstOrDefault(t => t.Id == id);
-        //    if (track == null)
-        //    {
-        //        throw new NotFoundException("Track not found");
-        //    }
-        //    if (track.Likes>0)
-        //        track.Likes--;
-        //}
     }
 }

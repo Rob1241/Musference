@@ -40,12 +40,18 @@ namespace Musference.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("AudioFile")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ImageFile")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Pluses")
                         .HasColumnType("int");
@@ -74,6 +80,9 @@ namespace Musference.Migrations
                     b.Property<int>("AnswersAmount")
                         .HasColumnType("int");
 
+                    b.Property<string>("AudioFile")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -83,6 +92,9 @@ namespace Musference.Migrations
 
                     b.Property<string>("Heading")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImageFile")
                         .HasColumnType("longtext");
 
                     b.Property<int>("Pluses")
@@ -101,39 +113,6 @@ namespace Musference.Migrations
                     b.ToTable("QuestionsDbSet");
                 });
 
-            modelBuilder.Entity("Musference.Models.Entities.Role", b =>
-                {
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("RoleId");
-
-                    b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("Musference.Models.Entities.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TagsDbSet");
-                });
-
             modelBuilder.Entity("Musference.Models.Entities.Track", b =>
                 {
                     b.Property<int>("Id")
@@ -144,14 +123,18 @@ namespace Musference.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("AudioFile")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Length")
-                        .HasColumnType("int");
-
                     b.Property<int>("Likes")
                         .HasColumnType("int");
+
+                    b.Property<string>("LogoFile")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -196,6 +179,9 @@ namespace Musference.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("ImageFile")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -207,29 +193,9 @@ namespace Musference.Migrations
                     b.Property<int>("Reputation")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("UsersDbSet");
-                });
-
-            modelBuilder.Entity("QuestionTag", b =>
-                {
-                    b.Property<int>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionsId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("QuestionTag");
                 });
 
             modelBuilder.Entity("QuestionUser", b =>
@@ -245,21 +211,6 @@ namespace Musference.Migrations
                     b.HasIndex("UsersThatLikedId");
 
                     b.ToTable("QuestionUser");
-                });
-
-            modelBuilder.Entity("TagTrack", b =>
-                {
-                    b.Property<int>("TagsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TracksId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TagsId", "TracksId");
-
-                    b.HasIndex("TracksId");
-
-                    b.ToTable("TagTrack");
                 });
 
             modelBuilder.Entity("TrackUser", b =>
@@ -333,32 +284,6 @@ namespace Musference.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Musference.Models.Entities.User", b =>
-                {
-                    b.HasOne("Musference.Models.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("QuestionTag", b =>
-                {
-                    b.HasOne("Musference.Models.Entities.Question", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Musference.Models.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("QuestionUser", b =>
                 {
                     b.HasOne("Musference.Models.Entities.Question", null)
@@ -370,21 +295,6 @@ namespace Musference.Migrations
                     b.HasOne("Musference.Models.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UsersThatLikedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TagTrack", b =>
-                {
-                    b.HasOne("Musference.Models.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Musference.Models.Entities.Track", null)
-                        .WithMany()
-                        .HasForeignKey("TracksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

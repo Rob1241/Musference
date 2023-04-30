@@ -7,6 +7,7 @@ namespace Musference.Models.EndpointModels.Question
         public List<GetAnswerDto> Answers { get; set; } = new List<GetAnswerDto>();
         public int Pages { get; set; }
         public int CurrentPage { get; set; }
+        public int AnswersAmount { get; set; }
         public GetQuestionDto Question { get; set; }
     }
 }
